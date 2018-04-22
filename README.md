@@ -1,7 +1,6 @@
 <center>
 
-# Info
-## System wieloagentowy
+# System wieloagentowy
 
 ### Temat:
 Doradca zakupu sprzętu komputerowego ( Tablet / Laptop / PC )
