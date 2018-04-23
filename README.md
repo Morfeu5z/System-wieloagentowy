@@ -20,9 +20,4 @@ __Pomysł 1:__ Odpowiedź na pytanie ustali jakieś wytyczne dla agenta na zasad
 
 __Pomysł 2:__ Każde pytanie ustala jeden parametr priorytetorwy dla jednego agenta, po czym agenci szukający zgłaszają się do agentów bazodanowych podając swój priorytet. Każdy agent szukający dostanie propozycję w odpowiedzi, a agent bazodanowy dopisze sobie do wskazówek priorytet agenta szukającego. Tym sposobem kolejni agenci szukający dostaną inne, bardziej precyzyjne wedle wytycznych użytkownika propozycje.
 
-Parametr, np. cena : waga od 1 do 5
-
-Cena `do 2000zł` : warunek powtórzył się 3x więc `waga 3`
-* ...
-
 </div>
