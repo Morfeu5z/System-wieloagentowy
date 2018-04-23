@@ -18,8 +18,9 @@ qlist = [
     questionList(q="Głośność pracy?", a="Cichy jak ninja", b="Niech mruczy aż miło", c="Obojętnie", d="5")
 ]
 
-for quest in qlist:
-    print("Pytanie: {0} \n Odp 1: {1} \n Odp 2: {2} \n Odp 3: {3}".format(quest.question, quest.ans1, quest.ans2, quest.ans3))
+def showList():
+    for quest in qlist:
+        print("Pytanie: {0} \n Odp 1: {1} \n Odp 2: {2} \n Odp 3: {3}".format(quest.question, quest.ans1, quest.ans2, quest.ans3))
 
 @app.route('/')
 def index():
