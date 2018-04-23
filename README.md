@@ -22,4 +22,6 @@ __Pomysł 2 (dwa typy agenta):__ Każde pytanie ustala jeden parametr prioryteto
 
 __Pomysł 3 (trzy typy agenta):__ Jak wyżej z tym, że będzie trzeci agent reprezentujący użytkownika rozdający parametry, po których agenci będą szukać propozycji. Po znalezieniu propozycji wrócą i zdadzą raport trzeciemu, gdzie ten wprowadzi modyfikację różne dla każdego agenta i wyśle ich raz jeszcze na poszukiwania optymalnych propozycji. 
 
+:warning: __Pomysł 4 (Tak powinno być):__ Na podstawie wybranych opcji agencie dostaną te same parametry i ruszą do agenta odpowiedzialnego za bazę danych. Agent bazodanowy będzie zmieniał swoje parametry tak by miał jak największy zyst z transakcji. Np. nauczył się, że agenci szukają sprzętu gameingowego więc próbuje wcisnąć droższy lub słabszy jak mu zalega na magazynie.
+
 </div>
