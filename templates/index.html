@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Multi-Agents</title>
+    <link rel=stylesheet type=text/css href="/static/style/style.css">
+</head>
+<body>
+<div class="grad"></div>
+    <div class="box-title">
+        <h1>System wieloagentowy</h1>
+        <h2>Doradca zakupu sprzętu komputerowego ( Tablet / laptop / PC )</h2>
+    </div>
+    {% for quest in qList %}
+    <div class="box-1">
+        <div class="question">{{ quest.question }}</div>
+        <button name="{{ quest.id }}" id="{{ quest.id }}1" onclick="buttClick(this)">{{ quest.ans1 }}</button>
+        <button name="{{ quest.id }}" id="{{ quest.id }}2" onclick="buttClick(this)">{{ quest.ans2 }}</button>
+        <button name="{{ quest.id }}" id="{{ quest.id }}3" onclick="buttClick(this)">{{ quest.ans3 }}</button>
+    </div>
+    {% endfor %}
+    <div class="box-1">
+        <button class="btn" onclick="showAns()">Wyświetl propozycje</button>
+    </div>
+
+<script>
+    ansList = [
+        0, 0, 0,
+        0, 0, 0,
+        0, 0, 0,
+        0, 0, 0,
+        0, 0, 0
+    ];
+    // cena sprzętu od,
+    // cena sprzętu do,
+    // producent procesora,
+    // seria i
+    // grafika dedykowana,
+    // Producent karty graficznej,
+    // Seria kart
+    // Pamięć DDRx
+    // Pojemność pamięci xGB
+    // SSD
+    // Pojemność xGB
+    pref = [
+        "0",
+        "2000",
+        "Intel",
+        "true",
+        "true",
+        "nVidia",
+        "GTX 10xx",
+        "3",
+        "4",
+        "true",
+        "120"
+    ]
+
+    function buttClick(butt) {
+        var name = butt.name;
+        var elem = document.getElementsByName(name);
+        // console.log(name);
+        elem[0].style.backgroundColor = "lightseagreen";
+        elem[1].style.backgroundColor = "lightseagreen";
+        elem[2].style.backgroundColor = "lightseagreen";
+        var x = parseInt(butt.id[1]);
+        var y = parseInt(butt.id[0]);
+        pos = ((y * 3) - 3) + 0;
+        ansList[pos] = false;
+        pos = ((y * 3) - 3) + 1;
+        ansList[pos] = false;
+        pos = ((y * 3) - 3) + 2;
+        ansList[pos] = false;
+        pos = ((y * 3) - 3) + (x - 1);
+        ansList[pos] = true;
+        butt.style.backgroundColor = "limegreen";
+    }
+
+    function showAns() {
+        console.log(ansList);
+
+    }
+
+</script>
+
+</body>
+</html>
