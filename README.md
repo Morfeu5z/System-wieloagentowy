@@ -41,23 +41,23 @@ __:-1:Pomysł 3 (trzy typy agenta):__ Jak wyżej z tym, że będzie trzeci agent
 | Pytanie | Opcja 1 | Opcja 2 | Opcja 3|
 | - | - | - | - |
 | 1. Jakiej wagi sprzęt? | Bardzo lekki | Do 3kg | Obojętnie |
-| 2. Orientacja cenowa? | Tani | Średniak | Mam hajsy |
-| 3. Przeznaczenie? | Przeglądarka i dokumenty | Uniwersalny | PC Gaming Master Race |
-| 4. Żywotność baterii? | Stawiam na długi czas pracy | Fajnie by było jakby na baterii wytrzymał co najmniej jeden film | Obojętnie |
-| 5. Głośność pracy? | Cichy jak ninja | Niech mruczy aż miło | Obojętnie |
+| 2. Przeznaczenie? | Przeglądarka i dokumenty | Uniwersalny | PC Gaming Master Race |
+| 3. Żywotność baterii? | Stawiam na długi czas pracy | Fajnie by było jakby na baterii wytrzymał co najmniej jeden film | Obojętnie |
+| 4. Głośność pracy? | Cichy jak ninja | Niech mruczy aż miło | Obojętnie |
+| 5. Cena? | Cena podana przez użytkownika |  |  |
 
 ### 3. Tabele wartości
 | Pytanie | opcja 1 | opcja 2 | opcja 3 |
 | - | - | - | - |
 | 1. Jakiej wagi sprzęt? | Bardzo lekki | Do 3kg | Obojętnie |
-|  |  0.6 | 0.4 | 0.2 |
-| 2. Orientacja cenowa? | Tani | Średniak | Mam hajsy |
-|  | 0.8 | 0.8 | 0.8 |
-| 3. Przeznaczenie? | Przeglądarka i dokumenty | Uniwersalny | PC Gaming Master Race |
-|  | 0.8 | 0.8 | 0.8 |
-| 4. Żywotność baterii? | Stawiam na długi czas pracy | Fajnie by było jakby na baterii wytrzymał co najmniej jeden film | Obojętnie |
-|  | 0.7 | 0.5 | 0.2 |
-| 5. Głośność pracy? | Cichy jak ninja | Niech mruczy aż miło | Obojętnie |
-|  | 0.4 | 0.4 | 0.2 |
+|  | 0>1.5 | 1.5>3 | * |
+| 2. Przeznaczenie? | Przeglądarka i dokumenty | Uniwersalny | PC Gaming Master Race |
+|  | karta zintegorwana, pentium or i3 | karta dedykowana, i3 or i5 | karta dedykowana gameingowa, i7 |
+| 3. Żywotność baterii? | Stawiam na długi czas pracy | Fajnie by było jakby na baterii wytrzymał co najmniej jeden film | Obojętnie |
+|  | 3<? | 0<3 | * |
+| 4. Głośność pracy? | Cichy jak ninja | Niech mruczy aż miło | Obojętnie |
+|  | pasywne or >20dB | aktywne | * |
+| 5. Orientacja cenowa? | Podaje user |  |  |
+|  | Podaje user |  |  |
 
 </div>
