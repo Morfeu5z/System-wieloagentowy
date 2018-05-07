@@ -24,17 +24,18 @@ __:-1:Pomysł 3 (trzy typy agenta):__ Jak wyżej z tym, że będzie trzeci agent
 
 :warning: __:+1:Pomysł 4 (Tak powinno być):__ Na podstawie wybranych opcji agencie dostaną te same parametry i ruszą do agenta odpowiedzialnego za bazę danych. Agent bazodanowy będzie zmieniał swoje parametry tak by miał jak największy zyst z transakcji. Np. nauczył się, że agenci szukają sprzętu gameingowego więc próbuje wcisnąć droższy lub słabszy jak mu zalega na magazynie.
 
+<pre>
         < "Poka towary" >
             (^ - ^)                  (^ - ^) < "Poka towary" >
-                    \                    /
-      (^ - ^) ___\_               /    ____(^ - ^)
-                          \          /    /
-          (^ - ^) ____  <( - u - )v  < "Oto moje towary" >
-                           /         |   \
-      (^ - ^) _____/           |     \__ (^ - ^)
-                                      \                         
+                    \                /
+          (^ - ^) ___\_             /  ______(^ - ^)
+                        \          / /
+           (^ - ^) ____  <( - u - )v  < "Oto moje towary" >
+                       /          | \
+      (^ - ^) ________/           |  \__ (^ - ^)
+                                 /                              
            < "Poka towary" > (^ - ^)
-
+<pre>
 
 ### 2. Pytania i odpowiedzi:
 | Pytanie | Opcja 1 | Opcja 2 | Opcja 3|
