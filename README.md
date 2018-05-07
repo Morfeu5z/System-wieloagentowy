@@ -24,6 +24,8 @@ __:-1:Pomysł 3 (trzy typy agenta):__ Jak wyżej z tym, że będzie trzeci agent
 
 :warning: __:+1:Pomysł 4 (Tak powinno być):__ Na podstawie wybranych opcji agencie dostaną te same parametry i ruszą do agenta odpowiedzialnego za bazę danych. Agent bazodanowy będzie zmieniał swoje parametry tak by miał jak największy zyst z transakcji. Np. nauczył się, że agenci szukają sprzętu gameingowego więc próbuje wcisnąć droższy lub słabszy jak mu zalega na magazynie.
 
+</div>
+
 <pre>
         < "Poka towary" >
             (^ - ^)                  (^ - ^) < "Poka towary" >
@@ -60,4 +62,3 @@ __:-1:Pomysł 3 (trzy typy agenta):__ Jak wyżej z tym, że będzie trzeci agent
 | 5. Orientacja cenowa? | Podaje user |  |  |
 |  | Podaje user |  |  |
 
-</div>
