@@ -58,7 +58,7 @@ __:-1:Pomysł 3 (trzy typy agenta):__ Jak wyżej z tym, że będzie trzeci agent
 | 3. Żywotność baterii? | Stawiam na długi czas pracy | Fajnie by było jakby na baterii wytrzymał co najmniej jeden film | Obojętnie |
 |  | 3<~ | 0<3 | * |
 | 4. Głośność pracy? | Cichy jak ninja | Niech mruczy aż miło | Obojętnie |
-|  | pasywne or ~>20dB | aktywne | * |
+|  | pasywne or ~<20dB | aktywne | * |
 | 5. Orientacja cenowa? | Cena | status | - |
 |  | Podaje user | negocjacje | - |
 
