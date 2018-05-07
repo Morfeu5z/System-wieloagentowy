@@ -1,15 +1,15 @@
 <div align='center'>
 
-## System wieloagentowy
+# System wieloagentowy
 
-### Temat:
+## Temat:
 Doradca zakupu sprzętu komputerowego ( Tablet / Laptop / PC )
 
 Aleksander Sinkowski
 </div>
 <div align="justify">
 
-### Opis:
+### 1.Opis:
 * Projekt powstał na potrzeby zajęć.
 * W czym pisać? W Pythonie i Flasku.
 * Całość będzie śmigała web'owo.
@@ -24,27 +24,39 @@ __:-1:Pomysł 3 (trzy typy agenta):__ Jak wyżej z tym, że będzie trzeci agent
 
 :warning: __:+1:Pomysł 4 (Tak powinno być):__ Na podstawie wybranych opcji agencie dostaną te same parametry i ruszą do agenta odpowiedzialnego za bazę danych. Agent bazodanowy będzie zmieniał swoje parametry tak by miał jak największy zyst z transakcji. Np. nauczył się, że agenci szukają sprzętu gameingowego więc próbuje wcisnąć droższy lub słabszy jak mu zalega na magazynie.
 
+        < "Poka towary" >
+            (^ - ^)                  (^ - ^) < "Poka towary" >
+                    \                    /
+      (^ - ^) ___\_               /    ____(^ - ^)
+                          \          /    /
+          (^ - ^) ____  <( - u - )v  < "Oto moje towary" >
+                           /         |   \
+      (^ - ^) _____/           |     \__ (^ - ^)
+                                      \                         
+           < "Poka towary" > (^ - ^)
+
+
 ### 2. Pytania i odpowiedzi:
 | Pytanie | Opcja 1 | Opcja 2 | Opcja 3|
 | - | - | - | - |
-| Jakiej wagi sprzęt? | Bardzo lekki | Do 3kg | Obojętnie |
-| Orientacja cenowa? | Tani | Średniak | Mam hajsy |
-| Przeznaczenie? | Przeglądarka i dokumenty | Uniwersalny | PC Gaming Master Race |
-| Żywotność baterii? | Stawiam na długi czas pracy | Fajnie by było jakby na baterii wytrzymał co najmniej jeden film | Obojętnie |
-| Głośność pracy? | Cichy jak ninja | Niech mruczy aż miło | Obojętnie |
+| 1. Jakiej wagi sprzęt? | Bardzo lekki | Do 3kg | Obojętnie |
+| 2. Orientacja cenowa? | Tani | Średniak | Mam hajsy |
+| 3. Przeznaczenie? | Przeglądarka i dokumenty | Uniwersalny | PC Gaming Master Race |
+| 4. Żywotność baterii? | Stawiam na długi czas pracy | Fajnie by było jakby na baterii wytrzymał co najmniej jeden film | Obojętnie |
+| 5. Głośność pracy? | Cichy jak ninja | Niech mruczy aż miło | Obojętnie |
 
 ### 3. Tabele wartości
 | Pytanie | opcja 1 | opcja 2 | opcja 3 |
 | - | - | - | - |
-| Jakiej wagi sprzęt? | Bardzo lekki | Do 3kg | Obojętnie |
+| 1. Jakiej wagi sprzęt? | Bardzo lekki | Do 3kg | Obojętnie |
 |  |  0.6 | 0.4 | 0.2 |
-| Orientacja cenowa? | Tani | Średniak | Mam hajsy |
+| 2. Orientacja cenowa? | Tani | Średniak | Mam hajsy |
 |  | 0.8 | 0.8 | 0.8 |
-| Przeznaczenie? | Przeglądarka i dokumenty | Uniwersalny | PC Gaming Master Race |
+| 3. Przeznaczenie? | Przeglądarka i dokumenty | Uniwersalny | PC Gaming Master Race |
 |  | 0.8 | 0.8 | 0.8 |
-| Żywotność baterii? | Stawiam na długi czas pracy | Fajnie by było jakby na baterii wytrzymał co najmniej jeden film | Obojętnie |
+| 4. Żywotność baterii? | Stawiam na długi czas pracy | Fajnie by było jakby na baterii wytrzymał co najmniej jeden film | Obojętnie |
 |  | 0.7 | 0.5 | 0.2 |
-| Głośność pracy? | Cichy jak ninja | Niech mruczy aż miło | Obojętnie |
+| 5. Głośność pracy? | Cichy jak ninja | Niech mruczy aż miło | Obojętnie |
 |  | 0.4 | 0.4 | 0.2 |
 
 </div>
