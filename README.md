@@ -35,7 +35,7 @@ __:-1:Pomysł 3 (trzy typy agenta):__ Jak wyżej z tym, że będzie trzeci agent
       (^ - ^) ________/           |  \__ (^ - ^)
                                  /                              
            < "Poka towary" > (^ - ^)
-<pre>
+</pre>
 
 ### 2. Pytania i odpowiedzi:
 | Pytanie | Opcja 1 | Opcja 2 | Opcja 3|
