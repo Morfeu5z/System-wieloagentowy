@@ -6,7 +6,7 @@
 Doradca zakupu sprzętu komputerowego ( Tablet / Laptop / PC )
 
 Aleksander Sinkowski
-</div>
+
 <div align="justify">
 
 ### 1.Opis:

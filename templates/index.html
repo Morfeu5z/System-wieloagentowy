@@ -2,6 +2,7 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <title>Multi-Agents</title>
     <link rel=stylesheet type=text/css href="/static/style/style.css">
 </head>
@@ -54,7 +55,6 @@
     function buttClick(butt) {
         var name = butt.name;
         var elem = document.getElementsByName(name);
-        // console.log(name);
         elem[0].style.backgroundColor = "lightseagreen";
         elem[1].style.backgroundColor = "lightseagreen";
         elem[2].style.backgroundColor = "lightseagreen";
@@ -81,11 +81,27 @@
             document.getElementById('range3').value,
             document.getElementById('range4').value,
             document.getElementById('range5').value
-            ]
+            ];
         var price = document.getElementById('price').value;
         console.log('Odpowiedzi: ' + ansList);
         console.log('Priorytety: ' + priList);
         console.log('Cena: ' + price);
+        $.post({
+            url: 'getData',
+            data: {
+                'butt' : JSON.stringify(ansList),
+                'prio' : JSON.stringify(priList),
+                'pric' : price,
+            },
+            success: function (response) {
+                console.log('Wysłano agentów.');
+                console.log(response);
+            },
+            error: function (error) {
+                console.log('Coś poszło nie tak.');
+                console.log(error);
+            }
+        });
     }
 
     /**
@@ -93,7 +109,6 @@
      * @param range
      */
     function rangeChange(range) {
-        console.log(range.value);
         document.getElementById('span' + range.name).innerText = range.value;
     }
 
