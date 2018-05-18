@@ -12,10 +12,9 @@ class questionList:
 
 qlist = [
     questionList(q="Jakiej wagi sprzęt?", a="Bardzo lekki", b="Do 3kg", c="Obojętnie", d="1"),
-    questionList(q="Orientacja cenowa?", a="Tani", b="Średniak", c="Mam hajsy", d="2"),
-    questionList(q="Przeznaczenie?", a="Przeglądarka i dokumenty", b="Uniwersalny", c="PC Gaming Master Race", d="3"),
-    questionList(q="Żywotność baterii?", a="Stawiam na długi czas pracy", b="Fajnie jakby na bateri wytrzymał co najmniej jeden film", c="Obojętnie", d="4"),
-    questionList(q="Głośność pracy?", a="Cichy jak ninja", b="Niech mruczy aż miło", c="Obojętnie", d="5")
+    questionList(q="Przeznaczenie?", a="Przeglądarka i dokumenty", b="Uniwersalny", c="PC Gaming Master Race", d="2"),
+    questionList(q="Żywotność baterii?", a="Stawiam na długi czas pracy", b="Fajnie jakby na bateri wytrzymał co najmniej jeden film", c="Obojętnie", d="3"),
+    questionList(q="Głośność pracy?", a="Cichy jak ninja", b="Niech mruczy aż miło", c="Obojętnie", d="4")
 ]
 
 def showList():

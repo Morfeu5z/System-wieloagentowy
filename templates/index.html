@@ -7,31 +7,50 @@
 </head>
 <body>
 <div class="grad"></div>
-    <div class="box-title">
-        <h1>System wieloagentowy</h1>
-        <h2>Doradca zakupu sprzętu komputerowego ( Tablet / Laptop / PC )</h2>
-    </div>
-    {% for quest in qList %}
+<div class="box-title">
+    <h1>System wieloagentowy</h1>
+    <h2>Doradca zakupu sprzętu komputerowego ( Tablet / Laptop / PC )</h2>
+</div>
+{% for quest in qList %}
     <div class="box-1">
         <div class="question">{{ quest.question }}</div>
         <button name="{{ quest.id }}" id="{{ quest.id }}1" onclick="buttClick(this)">{{ quest.ans1 }}</button>
         <button name="{{ quest.id }}" id="{{ quest.id }}2" onclick="buttClick(this)">{{ quest.ans2 }}</button>
         <button name="{{ quest.id }}" id="{{ quest.id }}3" onclick="buttClick(this)">{{ quest.ans3 }}</button>
     </div>
-    {% endfor %}
-    <div class="box-1">
-        <button class="btn" onclick="showAns()">Wyświetl propozycje</button>
+    <div>Priorytet: <span id="span{{ quest.id }}">1</span>
+        <input name="{{ quest.id }}" id="range{{ quest.id }}" type="range" min="1" max="5" value="1" oninput="rangeChange(this)">
     </div>
+    <br>
+{% endfor %}
+    <div class="box-1">
+        <div class="question">Przybliżona cena</div>
+        <input class="input" type="number" id="price" value="2000">
+    </div>
+    <div>Priorytet: <span id="span5">1</span>
+        <input name="5" id="range5" type="range" min="1" max="5" value="1" oninput="rangeChange(this)">
+    </div>
+    <br>
+<div class="box-1">
+    <button class="btn" onclick="showAns()">Wyświetl propozycje</button>
+</div>
 
 <script>
+    /**
+     * Lista wskazujaca na zaznaczone przyciski
+     * @type {number[]}
+     */
     ansList = [
-        0, 0, 0,
         0, 0, 0,
         0, 0, 0,
         0, 0, 0,
         0, 0, 0
     ];
-    
+
+    /**
+     * Zmiana listy wartości po kliknięciu
+     * @param butt
+     */
     function buttClick(butt) {
         var name = butt.name;
         var elem = document.getElementsByName(name);
@@ -52,8 +71,30 @@
         butt.style.backgroundColor = "limegreen";
     }
 
+    /**
+     * Wyślij dane
+     */
     function showAns() {
-        console.log(ansList);
+        var priList = [
+            document.getElementById('range1').value,
+            document.getElementById('range2').value,
+            document.getElementById('range3').value,
+            document.getElementById('range4').value,
+            document.getElementById('range5').value
+            ]
+        var price = document.getElementById('price').value;
+        console.log('Odpowiedzi: ' + ansList);
+        console.log('Priorytety: ' + priList);
+        console.log('Cena: ' + price);
+    }
+
+    /**
+     * Update priorytetów
+     * @param range
+     */
+    function rangeChange(range) {
+        console.log(range.value);
+        document.getElementById('span' + range.name).innerText = range.value;
     }
 
 </script>

@@ -60,3 +60,15 @@ button:last-child{
 .btn:hover{
     background-color: coral;
 }
+input{
+    border-radius: 0px 10px 10px 0px;
+    text-align: center;
+    border: none;
+    background: lightseagreen;
+    color: #fff;
+    transition: all 200ms;
+}
+input:hover{
+    background: white;
+    color: #000;
+}
