@@ -16,9 +16,9 @@ ansList = [
 function buttClick(butt) {
     var name = butt.name;
     var elem = document.getElementsByName(name);
-    elem[0].style.backgroundColor = "lightseagreen";
-    elem[1].style.backgroundColor = "lightseagreen";
-    elem[2].style.backgroundColor = "lightseagreen";
+    elem[0].className = "btn btn-outline-info";
+    elem[1].className = "btn btn-outline-info";
+    elem[2].className = "btn btn-outline-info";
     var x = parseInt(butt.id[1]);
     var y = parseInt(butt.id[0]);
     pos = ((y * 3) - 3) + 0;
@@ -29,7 +29,7 @@ function buttClick(butt) {
     ansList[pos] = false;
     pos = ((y * 3) - 3) + (x - 1);
     ansList[pos] = true;
-    butt.style.backgroundColor = "limegreen";
+    butt.className = "btn btn-info";
 }
 
 /**

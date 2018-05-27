@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
+    <script async src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <script async src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
+            integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+            crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Raleway:400,700&amp;subset=latin-ext" rel="stylesheet">
     <meta charset="UTF-8">
-    <!--Pobranie jquery mini-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <!--Pobranie skrtyptu ustalającego dane do przesłania-->
+    <link rel="shortcut icon" href="../../static/img/favicon.ico">
+    <script async src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <script async src="../static/source/index.js"></script>
     <!--Pobranie stylów-->
     <link rel=stylesheet type=text/css href="/static/style/style.css">
@@ -12,44 +18,63 @@
     <title>Multi-Agents</title>
 </head>
 <body>
+<div class="container m-5">
+    <div class="row">
+        <div class="col-12 card px-5 py-3">
+            <div class="grad"></div>
+            <div class="box-title">
+                <h1>System wieloagentowy</h1>
+                <h2>Doradca zakupu sprzętu komputerowego<br>( Tablet / Laptop / PC )</h2>
+            </div>
 
-
-<div class="grad"></div>
-<div class="box-title">
-    <h1>System wieloagentowy</h1>
-    <h2>Doradca zakupu sprzętu komputerowego ( Tablet / Laptop / PC )</h2>
-</div>
-
-<!--Wygenerowanie pytań z listy pytań-->
-{% for quest in qList %}
-    <div class="box-1">
-        <div class="question">{{ quest.question }}</div>
-        <button name="{{ quest.id }}" id="{{ quest.id }}1" onclick="buttClick(this)">{{ quest.ans1 }}</button>
-        <button name="{{ quest.id }}" id="{{ quest.id }}2" onclick="buttClick(this)">{{ quest.ans2 }}</button>
-        <button name="{{ quest.id }}" id="{{ quest.id }}3" onclick="buttClick(this)">{{ quest.ans3 }}</button>
+            <!--Wygenerowanie pytań z listy pytań-->
+            {% for quest in qList %}
+                <div class="box-1 text-center">
+                    <br>
+                    <div class="btn btn-success">{{ quest.question }}</div>
+                    <hr>
+                    <button name="{{ quest.id }}" class="btn btn-outline-info" id="{{ quest.id }}1"
+                            onclick="buttClick(this)">{{ quest.ans1 }}</button>
+                    <br>
+                    <button name="{{ quest.id }}" class="btn btn-outline-info" id="{{ quest.id }}2"
+                            onclick="buttClick(this)">{{ quest.ans2 }}</button>
+                    <br>
+                    <button name="{{ quest.id }}" class="btn btn-outline-info" id="{{ quest.id }}3"
+                            onclick="buttClick(this)">{{ quest.ans3 }}</button>
+                    <br>
+                </div>
+                <br>
+                <div class="text-center">
+                    Priorytet: <span id="span{{ quest.id }}">1</span>
+                    <br>
+                    <input name="{{ quest.id }}" id="range{{ quest.id }}" type="range" min="1" max="5" value="1"
+                           oninput="rangeChange(this)">
+                </div>
+                <br>
+            {% endfor %}
+            <br>
+            <div class="box-1 text-center">
+                <button class="btn btn-success">Przybliżona cena</button>
+                <hr>
+                <input style="width: 300px" class="form-control text-center m-auto btn-outline-info" type="number"
+                       id="price" value="2000">
+            </div>
+            <div class="text-center mt-3">Priorytet: <span id="span5">1</span>
+                <input name="5" id="range5" type="range" min="1" max="5" value="1" oninput="rangeChange(this)">
+            </div>
+            <br>
+            <div class="text-center">
+                <button class="btn btn-outline-success" onclick="showAns()">Wyświetl propozycje</button>
+            </div>
+        </div>
     </div>
-    <div>Priorytet: <span id="span{{ quest.id }}">1</span>
-        <input name="{{ quest.id }}" id="range{{ quest.id }}" type="range" min="1" max="5" value="1"
-               oninput="rangeChange(this)">
-    </div>
-    <br>
-{% endfor %}
-<div class="box-1">
-    <div class="question">Przybliżona cena</div>
-    <input class="input" type="number" id="price" value="2000">
 </div>
-<div>Priorytet: <span id="span5">1</span>
-    <input name="5" id="range5" type="range" min="1" max="5" value="1" oninput="rangeChange(this)">
-</div>
-<br>
-<div class="box-1">
-    <button class="btn" onclick="showAns()">Wyświetl propozycje</button>
-</div>
-
-<!--Podciągnięcie danych w ramach odpowiedzi-->
-<div id="responde">
-
-</div>
-
+<div id="particles-js"></div>
+<script async defer>
+    particlesJS.load('particles-js', '../static/particles.json', function () {
+        console.log('callback - particles.js config loaded');
+    });
+    console.log('Uruchomienie cząsteczek.');
+</script>
 </body>
 </html>
