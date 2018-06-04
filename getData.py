@@ -27,10 +27,8 @@ def sendAgent(w, u, b, d, p):
     client.connect((target_host, target_port))
 
     '''ID:Nr_Spotkania:Wiadomosc'''
-    testAgent = '1:1:none'
 
-    request = bytearray(testAgent)
-    client.send(request)
+    client.send(b'1_1_none')
 
     '''
       naprawde tu dziala pętla w odrębnym wątku która czeka na 
@@ -38,7 +36,7 @@ def sendAgent(w, u, b, d, p):
     '''
     reponse = client.recv(4096)
 
-    print("Propozycja: ", reponse.decode("unicode-escape"))
+    print("Odpowiedz sprzedawcy: ", reponse.decode("unicode-escape"))
     return reponse.decode("unicode-escape")
 
 

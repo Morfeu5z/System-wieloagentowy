@@ -23,14 +23,12 @@ def handle_client(client_socket):
     '''
     request = client_socket.recv(1024)
     print("[*] Odebrano: %s" % request)
-    quest = str(request)
-    print('2. Odebrano: ' + request)
 
     '''
     Odpowied na request
     '''
 
-    client_socket.send(b"Polaczenie wykonane pomyslnie.")
+    client_socket.send(b"Oto moje towary.")
     client_socket.close()
 
 

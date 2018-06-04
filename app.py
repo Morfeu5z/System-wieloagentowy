@@ -5,7 +5,7 @@ from getData import data
 from randomGenerator import rG
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://AleksDS69:KarmazynowaBroda69>@trashpanda.pwsz.nysa.pl/sklep_agentowy_1"
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://morfeu5z:KarmazynowaBroda69>@trashpanda.pwsz.nysa.pl/sklep_agentowy_1"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -105,7 +105,7 @@ def index():
     * Renderowanie strony głównej
     '''
     print('Start web.')
-    connect_test()
+    #connect_test()
     return render_template('index.html', qList=qlist)
 
 
