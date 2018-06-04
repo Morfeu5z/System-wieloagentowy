@@ -1,5 +1,6 @@
-from flask import Blueprint, render_template, request, jsonify
 import socket
+
+from flask import Blueprint, request, jsonify
 
 data = Blueprint('gatData', __name__, template_folder='templates')
 
@@ -123,10 +124,10 @@ def getData():
     if butt[11] =='true':
         dB = [100, prio[3]]
 
-    # 5. price = [min, max, priorytet]
+    # 5. price = [min, max]
     # [price-15%, price+15%]
     pric = float(pric)
-    price = [pric - (15/100)*pric, pric + (15/100)*pric, prio[4]]
+    price = [pric - (15/100)*pric, pric + (15/100)*pric]
 
     print(weight)
     print(use)

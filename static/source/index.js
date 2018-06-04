@@ -41,7 +41,6 @@ function showAns() {
         document.getElementById('range2').value,
         document.getElementById('range3').value,
         document.getElementById('range4').value,
-        document.getElementById('range5').value
     ];
     var price = document.getElementById('price').value;
     console.log('Odpowiedzi: ' + ansList);
