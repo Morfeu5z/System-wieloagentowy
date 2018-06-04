@@ -16,11 +16,21 @@ print("[*] Nasluchiwanie na porcie %s:%d" % (bind_ip, bind_port))
 
 
 def handle_client(client_socket):
-    ''' drukowanie informacji przeslane przez klienta '''
+    '''
+    Obsluga odbioru requestow
+    :param client_socket:
+    :return:
+    '''
     request = client_socket.recv(1024)
     print("[*] Odebrano: %s" % request)
-    ''' wysylanie packieta z powrotem'''
-    client_socket.send(b"ACK!")
+    quest = str(request)
+    print('2. Odebrano: ' + request)
+
+    '''
+    Odpowied na request
+    '''
+
+    client_socket.send(b"Polaczenie wykonane pomyslnie.")
     client_socket.close()
 
 

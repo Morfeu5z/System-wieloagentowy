@@ -1,6 +1,46 @@
 from flask import Blueprint, render_template, request, jsonify
+import socket
 
 data = Blueprint('gatData', __name__, template_folder='templates')
+
+def sendAgent(w, u, b, d, p):
+    '''
+    * Agent
+    :param w:
+    :param u:
+    :param b:
+    :param d:
+    :param p:
+    :return:
+    '''
+    print('Agant in action')
+    ''' host and port connetction '''
+    target_host = "0.0.0.0"
+    target_port = 9999
+
+    ''' towżymy objekt socket-u z typem translacji AF_INET
+        co znaczy, że ten dzila dla ipv4 adressow. 
+        SOCK_STREAM - typ używny dla TCP protokolów
+    '''
+    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    client.connect((target_host, target_port))
+
+    '''ID:Nr_Spotkania:Wiadomosc'''
+    testAgent = '1:1:none'
+
+    request = bytearray(testAgent)
+    client.send(request)
+
+    '''
+      naprawde tu dziala pętla w odrębnym wątku która czeka na 
+      dane od servera.
+    '''
+    reponse = client.recv(4096)
+
+    print("Propozycja: ", reponse.decode("unicode-escape"))
+    return reponse.decode("unicode-escape")
+
 
 
 @data.route('/getData', methods=['POST'])
@@ -96,4 +136,6 @@ def getData():
     print(dB)
     print(price)
 
-    return jsonify({'response' : 'Przetwarzanie danych.'})
+    propozycja = sendAgent(weight, use, battery,dB, price)
+
+    return jsonify({'response' : propozycja})

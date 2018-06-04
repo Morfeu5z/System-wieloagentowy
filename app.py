@@ -5,7 +5,7 @@ from getData import data
 from randomGenerator import rG
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root:@localhost/sklep_agentowy_1"
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://AleksDS69:KarmazynowaBroda69>@trashpanda.pwsz.nysa.pl/sklep_agentowy_1"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -43,6 +43,11 @@ class Items(db.Model):
 
 
 def renderRecords(howMany):
+    '''
+    * Tworzenie losowych wartosci do bazy danych
+    :param howMany:
+    :return:
+    '''
     for i in range(1, int(howMany)):
         print('Rendering: {0} records'.format(howMany))
         data = rG()
@@ -54,6 +59,10 @@ def renderRecords(howMany):
 
 
 def connect_test():
+    '''
+    * sprawdza czy w bazie sa jakies wartosci
+    :return:
+    '''
     item = Items.query.first()
     if item:
         print("Nawiązano połączenie z bazą.")
@@ -80,6 +89,11 @@ def showList():
 
 @app.route('/renderRecords/<howMany>')
 def letsGo(howMany):
+    '''
+    * Wywoanie generatora losowych danych
+    :param howMany:
+    :return:
+    '''
     print('Render: {0}'.format(howMany))
     renderRecords(howMany)
     return redirect('/')
