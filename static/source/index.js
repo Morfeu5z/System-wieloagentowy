@@ -72,5 +72,20 @@ function showAns() {
  * @param range
  */
 function rangeChange(range) {
-    document.getElementById('span' + range.name).innerText = range.value;
+    var ran = range.value;
+    console.log(ran);
+    switch (ran){
+        case "1":
+            document.getElementById('span' + range.name).innerText = 'niski';
+            break;
+        case "2":
+            document.getElementById('span' + range.name).innerText = 'sredni';
+            break;
+        case "3":
+            document.getElementById('span' + range.name).innerText = 'wysoki';
+            break;
+        default:
+            document.getElementById('span' + range.name).innerText = 'niski';
+            break;
+    }
 }
