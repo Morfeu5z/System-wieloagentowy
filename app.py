@@ -105,7 +105,7 @@ def index():
     * Renderowanie strony głównej
     '''
     print('Start web.')
-    #connect_test()
+    connect_test()
     return render_template('index.html', qList=qlist)
 
 
