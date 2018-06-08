@@ -4,6 +4,12 @@ from flask import Blueprint, request, jsonify
 
 data = Blueprint('gatData', __name__, template_folder='templates')
 
+def fakerSklep(message):
+    print('-----FAKER_SKLEPIKARZ-----')
+
+    print('-----------END------------')
+    return b'Oto moje towary'
+
 def sendAgent(w, u, b, d, p):
     '''
     * Agent
@@ -29,16 +35,20 @@ def sendAgent(w, u, b, d, p):
 
     '''ID:Nr_Spotkania:Wiadomosc'''
 
-    client.send(b'1_1_none')
+    message = str(w) + '|' + str(u) + '|' + str(b) + '|' + str(d) + '|' + str(p)
+    print('Message: {}'.format(message))
+    # client.send(message.encode("unicode-escape"))
 
     '''
       naprawde tu dziala pętla w odrębnym wątku która czeka na 
       dane od servera.
     '''
-    reponse = client.recv(4096)
+    # reponse = client.recv(4096)
 
-    print("Odpowiedz sprzedawcy: ", reponse.decode("unicode-escape"))
-    return reponse.decode("unicode-escape")
+    respo = fakerSklep(message)
+    respo = respo.decode("unicode-escape")
+    print("Odpowiedz sprzedawcy: ", respo)
+    return respo
 
 
 

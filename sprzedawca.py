@@ -22,7 +22,7 @@ def handle_client(client_socket):
     :return:
     '''
     request = client_socket.recv(1024)
-    print("[*] Odebrano: %s" % request)
+    print("[*] Odebrano: " + request.decode("unicode-escape"))
 
     '''
     Odpowied na request
