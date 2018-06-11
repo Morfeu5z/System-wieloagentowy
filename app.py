@@ -1,45 +1,14 @@
-from flask import Flask, render_template, jsonify, request, redirect
-from static.source import question
-from flask_sqlalchemy import SQLAlchemy
-from getData import data
-from randomGenerator import rG
+from flask import Flask, render_template, redirect
+from static.source.blueprint import question
+from static.source.model.Items import Items
+from static.source.model import session
+
+from static.source.blueprint.getData import data
+from static.source.blueprint.randomGenerator import rG
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://morfeu5z:KarmazynowaBroda69>@trashpanda.pwsz.nysa.pl/sklep_agentowy_1"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
 
 app.register_blueprint(data)
-
-
-class Items(db.Model):
-    '''
-    * Model dla tabeli items
-    '''
-    __tablename__ = 'items'
-    id = db.Column('id', db.Integer, primary_key=True)
-    name = db.Column('name', db.String(250))
-    type = db.Column('type', db.String(50))
-    weight = db.Column('weight', db.Float)
-    cpu = db.Column('cpu', db.Integer)
-    gpu = db.Column('gpu', db.Integer)
-    battery = db.Column('battery', db.Integer)
-    dec = db.Column('dec', db.Integer)
-    price = db.Column('price', db.Float)
-    procesor = db.Column('procesor', db.String(50))
-    grafika = db.Column('grafika', db.String(50))
-
-    def __init__(self, name, type, weight, cpu, gpu, battery, dec, price, procesor, grafika):
-        self.name = name
-        self.type = type
-        self.weight = weight
-        self.cpu = cpu
-        self.gpu = gpu
-        self.battery = battery
-        self.dec = dec
-        self.price = price
-        self.procesor = procesor
-        self.grafika = grafika
 
 
 def renderRecords(howMany):
@@ -54,8 +23,8 @@ def renderRecords(howMany):
         print("Rand: {0} {1} {2}kg {3}CPU {4}GPU {5}h {6}dB {7}PLN {8} {9}".format(data[0], data[1], data[2], data[3],
                                                                                    data[4], data[5], data[6], data[7],
                                                                                    data[8], data[9]))
-        db.session.add(Items(data[1], data[0], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9]))
-    db.session.commit()
+        session.add(Items(data[1], data[0], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9]))
+    session.commit()
 
 
 def connect_test():

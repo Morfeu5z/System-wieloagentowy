@@ -46,6 +46,7 @@ function showAns() {
     console.log('Odpowiedzi: ' + ansList);
     console.log('Priorytety: ' + priList);
     console.log('Cena: ' + price);
+    $('#showProp').text("Trwa szukanie, poczekaj proszę.");
     $.post({
         url: 'getData',
         data: {
@@ -56,10 +57,12 @@ function showAns() {
         success: function (response) {
             console.log('Wysłano agentów.');
             console.log(response);
+            //window.location = '#responde';
+            $('#showProp').text("Wyszukiwanie zakończone. Powtórzyć?");
             $('#responde').text(response.response);
-            window.location = '#responde';
         },
         error: function (error) {
+            $('#showProp').text("Coś poszło nie tak. Powtórzyć?");
             console.log('Coś poszło nie tak.');
             console.log(error);
         }
@@ -73,7 +76,7 @@ function showAns() {
 function rangeChange(range) {
     var ran = range.value;
     console.log(ran);
-    switch (ran){
+    switch (ran) {
         case "1":
             document.getElementById('span' + range.name).innerText = 'niski';
             break;
