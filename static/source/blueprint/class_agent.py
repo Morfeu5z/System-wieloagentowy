@@ -7,12 +7,14 @@ from static.source.blueprint.rmChar import rmChar
 
 
 class AgentC():
-    def __init__(self, data, faker, device):
+    def __init__(self, data, faker, device, id):
         threading.Thread.__init__(self)
         self.dane = data
         self.faker = faker
         self.device = device
         self.oldPrice = 0
+        self.loopNum = 0
+        self.agentID = id
 
     def makeMessage(self, mm):
         '''
@@ -38,29 +40,30 @@ class AgentC():
             # show|42|none
             message = stan + '|' + self.dane['used'] + '|' + box
 
-            print('Start message: {}'.format(self.dane))
+            print('Agen ID: {}'.format(self.agentID))
             return message
 
     def buildMessage(self, respo):
         r = respo.split('|')
         if r[0] == 'negotiation':
             humor = random.randint(1,10)
-            print('Chce: -{}%'.format(humor))
+            print('Agen ID: {}, Chce: -{}%'.format(self.agentID, humor))
             chcetyle = self.oldPrice - ((self.oldPrice * humor)/100)
-            print('Nowa cena: {} vs {}'.format(r[1], chcetyle))
+            print('Agen ID: {}, Nowa cena: {} vs {}'.format(self.agentID, r[1], chcetyle))
             if float(r[1]) <= chcetyle:
                 return 'negotiation|ok|' + str(r[2])
             else:
                 return 'negotiation|toomuch|' + str(r[2])
         else:
             rid = r[1]
-            print('Dane r: {}'.format(r))
+            # print('Dane r: {}'.format(r))
             option = r[0]
             r = [r[4], r[5], r[6], r[7], r[8], r[9]]
             o = [self.dane['weight'], self.dane['use'], self.dane['battery'], self.dane['dB'], self.dane['price']]
             if option == 'Look':
-                print('Interpretacja r: {}'.format(r))
-                print('Interpretacja o: {}'.format(o))
+                # print('Interpretacja r: {}'.format(r))
+                # print('Interpretacja o: {}'.format(o))
+                self.loopNum += 1
                 thinking = []
                 prio = []
                 tmp = self.dane['weight']
@@ -141,8 +144,8 @@ class AgentC():
                 if thinking[5] == 'nope' and int(prio[4]) < 3:
                     thinking[5] = 'ok'
 
-            print('Myśliciel: {}'.format(thinking))
-            print('Priorytet: {}'.format(prio))
+            # print('Myśliciel: {}'.format(thinking))
+            # print('Priorytet: {}'.format(prio))
             ok = 0
             for x in thinking:
                 if x == 'ok':
@@ -152,6 +155,8 @@ class AgentC():
                 message = 'negotiation|toomuch|' + str(rid)
             if ok < 6:
                 message = 'talk|no|' + str(rid)
+            if self.loopNum > 50:
+                message = 'negotiation|end|' + str(rid)
 
             return message
 
@@ -160,7 +165,7 @@ class AgentC():
                     * Nawiązuje połączenie wysyłając zapytanie i czekając na odpowiedź
                     :return: dorzuci produkt do listy produktów
                     '''
-        print('Agent ruszył na poszukiwania')
+        # print('Agent ruszył na poszukiwania')
 
         # Stworzony zostanie obiekt socket z typem translacji AF_INET
         # przeznaczony dla adresów IPv4
@@ -184,6 +189,7 @@ class AgentC():
 
         while tran != 1:
             message = self.makeMessage(mm)
+
             # Wysłanie wiadomości do sztucznego sklepiku
             self.faker.message = message.encode("unicode-escape")
             self.faker.device_type = self.device
@@ -193,8 +199,10 @@ class AgentC():
             respo = respo.decode("unicode-escape")
             if respo[0] == '1':
                 tran = 1
+            if respo[0] == '2':
+                return 'none'
             mm = respo
 
         respo = respo.split('|')
-        print("Odpowiedz sprzedawcy: ", respo)
+        print("Agen ID: {}, take: {}".format(self.agentID, respo))
         return respo

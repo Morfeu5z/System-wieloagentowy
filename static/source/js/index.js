@@ -36,6 +36,9 @@ function buttClick(butt) {
  * Wyślij dane
  */
 function showAns() {
+    $('#imgLoading').css({'display': 'initial'});
+    $('#showProp').attr('disabled', 'disabled');
+    $('#responde').text('');
     var priList = [
         document.getElementById('range1').value,
         document.getElementById('range2').value,
@@ -55,15 +58,54 @@ function showAns() {
             'pric': price,
         },
         success: function (response) {
+            $('#imgLoading').css({'display': 'none'});
+            $('#responde').text('');
             console.log('Wysłano agentów.');
             console.log(response);
             //window.location = '#responde';
+            $('#showProp').removeAttr('disabled');
             $('#showProp').text("Wyszukiwanie zakończone. Powtórzyć?");
-            $('#responde').text(response.response);
+            var wynik = response.response;
+            console.log(wynik);
+            var count = wynik.length;
+            console.log(count);
+            var wynikInHtml = '<table><thead>' +
+                '<th>Nr</th>' +
+                '<th>Model</th>' +
+                '<th>Typ</th>' +
+                '<th>Waga</th>' +
+                '<th>CPU</th>' +
+                '<th>GPU</th>' +
+                '<th>Bateria</th>' +
+                '<th>dB</th>' +
+                '<th>Cena</th>' +
+                '<th>Procesor</th>' +
+                '<th>Grafika</th>' +
+                '</thead><tbody>';
+            for (var x = 0; x < count; x++) {
+                wynikInHtml += '<tr>';
+                for (var y = 0; y < wynik[x].length; y++) {
+                    if (y == 0) {
+                        wynikInHtml += '<td>' + x + '</td>';
+                    } else if (y == 1) {
+                        wynikInHtml += '';
+                    } else if (y == 2) {
+                        wynikInHtml += '<td>' + wynik[x][y] + '</td>';
+                    } else {
+                        wynikInHtml += '<td>' + wynik[x][y] + '</td>';
+                    }
+                }
+                wynikInHtml += '</tr>';
+            }
+            wynikInHtml += '</tbody></table>';
+            $('#responde').html(wynikInHtml);
+            // $('#responde').text(response.response);
         },
         error: function (error) {
             $('#showProp').text("Coś poszło nie tak. Powtórzyć?");
             console.log('Coś poszło nie tak.');
+            $('#showProp').removeAttr('disabled');
+            $('#imgLoading').css({'display': 'none'});
             console.log(error);
         }
     });

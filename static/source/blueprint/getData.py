@@ -1,3 +1,5 @@
+import random
+
 from flask import Blueprint, request, jsonify
 
 from static.source.blueprint.fake_shop import Faker_Shop
@@ -112,18 +114,38 @@ def getData():
     deviceTable = []
 
     print('Uruchomienie sklepikarza')
-    faker = [Faker_Shop()]
+    faker = []
+    fakerCount = 5
+    for x in range(0, fakerCount):
+        faker.append(Faker_Shop(x))
+    fake = 0
 
     print('Uruchomienie agenta')
     agents = []
-    for x in range(0,10):
-        agents.append(AgentC(dane, faker[0], used))
+    agentsCount = 50
+    for x in range(0,agentsCount):
+        agents.append(AgentC(dane, faker[random.randint(0,fakerCount-1)], used, x))
+
+    # Eliminacja powtórzeń
+    # Wybranie lepszej ceny
     canBe = 1
-    for x in range(0, 10):
+    for x in range(0, agentsCount):
         tmp = agents[x].run()
-        for y in deviceTable:
-            if y[1] == tmp[1]:
-                canBe = 0
-        if canBe == 1:
-            deviceTable.append(tmp)
+        backdoor = 0
+        while tmp == 'none' and backdoor < fakerCount:
+            backdoor+=1
+            agents[x].faker = faker[random.randint(0,fakerCount-1)]
+            tmp = agents[x].run()
+
+        if tmp != 'none':
+            num = -1
+            for y in deviceTable:
+                num+=1
+                if y[1] == tmp[1]:
+                    if y[9] > tmp[9]:
+                        deviceTable[num] = tmp
+                    canBe = 0
+            if canBe == 1:
+                deviceTable.append(tmp)
+
     return jsonify({'response': deviceTable})
