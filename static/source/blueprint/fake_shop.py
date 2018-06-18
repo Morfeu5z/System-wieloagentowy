@@ -1,6 +1,7 @@
 # search|office/universal/game, talk|yes/no, negotiate|toomuch/ok/nope, show|product_id
 import random
 import threading
+import multiprocessing
 
 from static.source.model import session
 from static.source.model.Items import Items
@@ -16,33 +17,36 @@ class Faker_Shop:
 
     def search(self, message, box):
         self.device_type = message
-        # print('No ja to szukam laptopa typu: {}'.format(self.device_type))
-        itemsCount = session.query(Items).count() - 1
-        randID = random.randint(0, itemsCount)
-        item = session.query(Items).filter(Items.id == randID).first()
-        while not item:
-            print('Item: {}'.format(item))
+        back_message = 'Look'
+        for x in range(10):
+            # print('No ja to szukam laptopa typu: {}'.format(self.device_type))
+            itemsCount = session.query(Items).count() - 1
             randID = random.randint(0, itemsCount)
             item = session.query(Items).filter(Items.id == randID).first()
-        # print('Shop ID: {}:{}'.format(self.shopID, item.name))
-        # Generowanie odpowiedzi
-        back_message = 'Look|' + \
-                       str(item.id) + '|' + \
-                       str(item.name) + '|' + \
-                       str(item.type) + '|' + \
-                       str(item.weight) + '|' + \
-                       str(item.cpu) + '|' + \
-                       str(item.gpu) + '|' + \
-                       str(item.battery) + '|' + \
-                       str(item.dec) + '|' + \
-                       str(item.price) + '|' + \
-                       str(item.procesor) + '|' + \
-                       str(item.grafika)
-        # print(back_message)
+            while not item:
+                print('Item: {}'.format(item))
+                randID = random.randint(0, itemsCount)
+                item = session.query(Items).filter(Items.id == randID).first()
+            # print('Shop ID: {}:{}'.format(self.shopID, item.name))
+            # Generowanie odpowiedzi
+            back_message += '&' + \
+                           str(item.id) + '|' + \
+                           str(item.name) + '|' + \
+                           str(item.type) + '|' + \
+                           str(item.weight) + '|' + \
+                           str(item.cpu) + '|' + \
+                           str(item.gpu) + '|' + \
+                           str(item.battery) + '|' + \
+                           str(item.dec) + '|' + \
+                           str(item.price) + '|' + \
+                           str(item.procesor) + '|' + \
+                           str(item.grafika)
+            # print(back_message)
         return back_message
 
     def talk(self, message, box):
         if message == 'no':
+            print('Something else')
             # print('Last item id: {}'.format(box))
             newSearch = self.search(self.device_type, box)
         return newSearch

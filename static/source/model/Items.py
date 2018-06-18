@@ -18,6 +18,8 @@ class Items(_Base):
     price = Column(Float)
     procesor = Column(String(50))
     grafika = Column(String(50))
+    device = Column(String(50))
+    sold = Column(Integer)
 
     def __init__(self, name, type, weight, cpu, gpu, battery, dec, price, procesor, grafika):
         self.name = name

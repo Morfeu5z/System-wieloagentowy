@@ -46,121 +46,134 @@ class AgentC():
     def buildMessage(self, respo):
         r = respo.split('|')
         if r[0] == 'negotiation':
-            humor = random.randint(1,10)
+            humor = random.randint(1, 10)
             print('Agen ID: {}, Chce: -{}%'.format(self.agentID, humor))
-            chcetyle = self.oldPrice - ((self.oldPrice * humor)/100)
+            chcetyle = self.oldPrice - ((self.oldPrice * humor) / 100)
             print('Agen ID: {}, Nowa cena: {} vs {}'.format(self.agentID, r[1], chcetyle))
             if float(r[1]) <= chcetyle:
                 return 'negotiation|ok|' + str(r[2])
             else:
                 return 'negotiation|toomuch|' + str(r[2])
         else:
-            rid = r[1]
-            # print('Dane r: {}'.format(r))
-            option = r[0]
-            r = [r[4], r[5], r[6], r[7], r[8], r[9]]
-            o = [self.dane['weight'], self.dane['use'], self.dane['battery'], self.dane['dB'], self.dane['price']]
-            if option == 'Look':
-                # print('Interpretacja r: {}'.format(r))
-                # print('Interpretacja o: {}'.format(o))
-                self.loopNum += 1
-                thinking = []
-                prio = []
-                tmp = self.dane['weight']
-                tmp = rmChar(tmp, ['[', ']', '\''])
-                tmp = tmp.split(',')
-                prio.append(tmp[2])
-                if float(r[0]) >= float(tmp[0]) and float(r[0]) <= float(tmp[1]):
-                    thinking.append('ok')
+            tab = respo.split('&')
+            tabR = []
+            for x in tab:
+                if x == 'Look':
+                    option = 'Look'
                 else:
-                    thinking.append('nope')
+                    tabR.append(x.split('|'))
+            ok = 0
+            for r in tabR:
+                # print('W paczce: {}'.format(r))
+                rid = r[0]
+                # print('Dane r: {}'.format(r))
+                r = [r[3], r[4], r[5], r[6], r[7], r[8]]
+                o = [self.dane['weight'], self.dane['use'], self.dane['battery'], self.dane['dB'], self.dane['price']]
+                if option == 'Look':
+                    # print('Interpretacja r: {}'.format(r))
+                    # print('Interpretacja o: {}'.format(o))
+                    self.loopNum += 1
+                    thinking = []
+                    prio = []
+                    tmp = self.dane['weight']
+                    tmp = rmChar(tmp, ['[', ']', '\''])
+                    tmp = tmp.split(',')
+                    prio.append(tmp[2])
+                    if float(r[0]) >= float(tmp[0]) and float(r[0]) <= float(tmp[1]):
+                        thinking.append('ok')
+                    else:
+                        thinking.append('nope')
 
-                tmp = self.dane['use']
-                tmp = rmChar(tmp, ['[', ']', '\''])
-                tmp = tmp.split(',')
-                prio.append(tmp[4])
-                if float(r[1]) >= float(tmp[0]) and float(r[1]) <= float(tmp[1]):
-                    thinking.append('ok')
-                else:
-                    thinking.append('nope')
-                if float(r[2]) >= float(tmp[2]) and float(r[2]) <= float(tmp[3]):
-                    thinking.append('ok')
-                else:
-                    thinking.append('nope')
+                    tmp = self.dane['use']
+                    tmp = rmChar(tmp, ['[', ']', '\''])
+                    tmp = tmp.split(',')
+                    prio.append(tmp[4])
+                    if float(r[1]) >= float(tmp[0]) and float(r[1]) <= float(tmp[1]):
+                        thinking.append('ok')
+                    else:
+                        thinking.append('nope')
+                    if float(r[2]) >= float(tmp[2]) and float(r[2]) <= float(tmp[3]):
+                        thinking.append('ok')
+                    else:
+                        thinking.append('nope')
 
-                tmp = self.dane['battery']
-                tmp = rmChar(tmp, ['[', ']', '\''])
-                tmp = tmp.split(',')
-                prio.append(tmp[1])
-                if float(r[3]) >= float(tmp[0]):
-                    thinking.append('ok')
-                else:
-                    thinking.append('nope')
+                    tmp = self.dane['battery']
+                    tmp = rmChar(tmp, ['[', ']', '\''])
+                    tmp = tmp.split(',')
+                    prio.append(tmp[1])
+                    if float(r[3]) >= float(tmp[0]):
+                        thinking.append('ok')
+                    else:
+                        thinking.append('nope')
 
-                tmp = self.dane['dB']
-                tmp = rmChar(tmp, ['[', ']', '\''])
-                tmp = tmp.split(',')
-                prio.append(tmp[1])
-                if float(r[4]) <= float(tmp[0]):
-                    thinking.append('ok')
-                else:
-                    thinking.append('nope')
+                    tmp = self.dane['dB']
+                    tmp = rmChar(tmp, ['[', ']', '\''])
+                    tmp = tmp.split(',')
+                    prio.append(tmp[1])
+                    if float(r[4]) <= float(tmp[0]):
+                        thinking.append('ok')
+                    else:
+                        thinking.append('nope')
 
-                tmp = self.dane['price']
-                tmp = rmChar(tmp, ['[', ']', '\''])
-                tmp = tmp.split(',')
-                prio.append(3)
-                if float(r[5]) >= float(tmp[0]) and float(r[5]) <= float(tmp[1]):
-                    thinking.append('ok')
-                else:
-                    thinking.append('nope')
-            if thinking[0] == 'nope' and int(prio[0]) < 2:
-                thinking[0] = 'ok'
-            if thinking[1] == 'nope' and int(prio[1]) < 2:
-                thinking[1] = 'ok'
-            if thinking[2] == 'nope' and int(prio[1]) < 2:
-                thinking[2] = 'ok'
-            if thinking[3] == 'nope' and int(prio[2]) < 2:
-                thinking[3] = 'ok'
-            if thinking[4] == 'nope' and int(prio[3]) < 2:
-                thinking[4] = 'ok'
-            if thinking[5] == 'nope' and int(prio[4]) < 2:
-                thinking[5] = 'ok'
-            ok=0
-            for x in thinking:
-                if x == 'ok':
-                    ok += 1
-            if ok >= 4:
-                if thinking[0] == 'nope' and int(prio[0]) < 3:
+                    tmp = self.dane['price']
+                    tmp = rmChar(tmp, ['[', ']', '\''])
+                    tmp = tmp.split(',')
+                    prio.append(3)
+                    if float(r[5]) >= float(tmp[0]) and float(r[5]) <= float(tmp[1]):
+                        thinking.append('ok')
+                    else:
+                        thinking.append('nope')
+                if thinking[0] == 'nope' and int(prio[0]) <= 2:
                     thinking[0] = 'ok'
-                if thinking[1] == 'nope' and int(prio[1]) < 3:
+                if thinking[1] == 'nope' and int(prio[1]) <= 2:
                     thinking[1] = 'ok'
-                if thinking[2] == 'nope' and int(prio[1]) < 3:
+                if thinking[2] == 'nope' and int(prio[1]) <= 2:
                     thinking[2] = 'ok'
-                if thinking[3] == 'nope' and int(prio[2]) < 3:
+                if thinking[3] == 'nope' and int(prio[2]) <= 2:
                     thinking[3] = 'ok'
-                if thinking[4] == 'nope' and int(prio[3]) < 3:
+                if thinking[4] == 'nope' and int(prio[3]) <= 2:
                     thinking[4] = 'ok'
-                if thinking[5] == 'nope' and int(prio[4]) < 3:
+                if thinking[5] == 'nope' and int(prio[4]) < 2:
                     thinking[5] = 'ok'
 
-            # print('Myśliciel: {}'.format(thinking))
-            # print('Priorytet: {}'.format(prio))
-            ok = 0
-            for x in thinking:
-                if x == 'ok':
-                    ok += 1
-            if ok == 6:
-                self.oldPrice = float(r[5])
-                message = 'negotiation|toomuch|' + str(rid)
+                # print('Myśliciel 1: {}'.format(thinking))
+
+                ok = 0
+                for x in thinking:
+                    if x == 'ok':
+                        ok += 1
+                if ok >= 4:
+                    if thinking[0] == 'nope' and int(prio[0]) <= 3:
+                        thinking[0] = 'ok'
+                    if thinking[1] == 'nope' and int(prio[1]) <= 3:
+                        thinking[1] = 'ok'
+                    if thinking[2] == 'nope' and int(prio[1]) <= 3:
+                        thinking[2] = 'ok'
+                    if thinking[3] == 'nope' and int(prio[2]) <= 3:
+                        thinking[3] = 'ok'
+                    if thinking[4] == 'nope' and int(prio[3]) <= 3:
+                        thinking[4] = 'ok'
+                    if thinking[5] == 'nope' and int(prio[4]) < 3:
+                        thinking[5] = 'ok'
+
+                # print('Myśliciel 2: {}'.format(thinking))
+                # print('Priorytet: {}'.format(prio))
+                ok = 0
+                for x in thinking:
+                    if x == 'ok':
+                        ok += 1
+                if ok == 6:
+                    self.oldPrice = float(r[5])
+                    message = 'negotiation|toomuch|' + str(rid)
+                    return message
+
             if ok < 6:
                 message = 'talk|no|' + str(rid)
-            if self.loopNum > 50:
+            if self.loopNum > 5:
                 message = 'negotiation|end|' + str(rid)
-
             return message
 
-    def run(self):
+    def run(self, return_dict):
         '''
                     * Nawiązuje połączenie wysyłając zapytanie i czekając na odpowiedź
                     :return: dorzuci produkt do listy produktów
@@ -184,7 +197,7 @@ class AgentC():
 
         ## reponse = client.recv(4096)
 
-        mm ='none'
+        mm = 'none'
         tran = 0
 
         while tran != 1:
@@ -200,9 +213,12 @@ class AgentC():
             if respo[0] == '1':
                 tran = 1
             if respo[0] == '2':
-                return 'none'
+                print('Nie znaleziono :(')
+                return_dict[0] = 'empty'
+                return 0
             mm = respo
 
-        respo = respo.split('|')
-        print("Agen ID: {}, take: {}".format(self.agentID, respo))
-        return respo
+        respo2 = respo.split('|')
+        print("Agen ID: {}, take: {}".format(self.agentID, respo2))
+        return_dict[0] = respo
+        return 0

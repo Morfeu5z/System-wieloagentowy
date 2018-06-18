@@ -1,4 +1,9 @@
+import multiprocessing
 import random
+import threading
+import time
+from multiprocessing import Pool
+from shop import realy_shop, printme
 
 from flask import Blueprint, request, jsonify
 
@@ -7,6 +12,10 @@ from static.source.blueprint.rmChar import rmChar
 from static.source.blueprint.class_agent import AgentC
 
 data = Blueprint('gatData', __name__, template_folder='templates')
+
+
+def testMulti(num):
+    print('Proces: {}'.format(num))
 
 
 @data.route('/getData', methods=['POST'])
@@ -122,30 +131,41 @@ def getData():
 
     print('Uruchomienie agenta')
     agents = []
-    agentsCount = 50
-    for x in range(0,agentsCount):
-        agents.append(AgentC(dane, faker[random.randint(0,fakerCount-1)], used, x))
+    agentsCount = 25
+    for x in range(0, agentsCount):
+        agents.append(AgentC(dane, faker[random.randint(0, fakerCount - 1)], used, x))
 
     # Eliminacja powtórzeń
     # Wybranie lepszej ceny
     canBe = 1
-    for x in range(0, agentsCount):
-        tmp = agents[x].run()
-        backdoor = 0
-        while tmp == 'none' and backdoor < fakerCount:
-            backdoor+=1
-            agents[x].faker = faker[random.randint(0,fakerCount-1)]
-            tmp = agents[x].run()
+    time0 = time.time()
 
-        if tmp != 'none':
+    tmp = ''
+    xyz = []
+
+    # Wielowątkowe wypuszczenie agentów
+    # Uzupełniają listę parametrami
+    # lub empty jeśli nic agent nie znajdzie
+    for x in range(0, agentsCount):
+        manager = multiprocessing.Manager()
+        return_dict = manager.dict()
+        agent = multiprocessing.Process(target=agents[x].run(return_dict))
+        xyz.append(return_dict.values())
+        agent.start()
+        agent.join()
+
+    # Eliminacja powtórzeń
+    for elem in xyz:
+        tmp = elem[0].split('|')
+        if tmp[0] != 'empty':
             num = -1
             for y in deviceTable:
-                num+=1
+                num += 1
                 if y[1] == tmp[1]:
                     if y[9] > tmp[9]:
                         deviceTable[num] = tmp
                     canBe = 0
             if canBe == 1:
                 deviceTable.append(tmp)
-
+    print(time.time() - time0)
     return jsonify({'response': deviceTable})
