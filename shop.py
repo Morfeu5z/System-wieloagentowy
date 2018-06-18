@@ -1,5 +1,6 @@
 import socket
 import threading
+from static.source.blueprint.fake_shop import Faker_Shop
 
 def realy_shop():
     '''

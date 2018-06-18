@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect
 from static.source.blueprint import question
 from static.source.model.Items import Items
+from static.source.model.Memory import Memory
 from static.source.model import session
 
 from static.source.blueprint.getData import data
@@ -25,6 +26,39 @@ def renderRecords(howMany):
                                                                                    data[8], data[9]))
         session.add(Items(data[1], data[0], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9]))
     session.commit()
+
+
+def memoTester():
+    item = session.query(Memory).first()
+    original = item.type
+    print('Test memory 1/4: {} |Original|'.format(item.type))
+    item.type = 'none'
+    print('Test memory 2/4: {} |Change|'.format(item.type))
+    session.add(item)
+    session.commit()
+    item = session.query(Memory).first()
+    print('Test memory 3/4: {} |Updated|'.format(item.type))
+    item.type = original
+    session.add(item)
+    session.commit()
+
+
+@app.route('/testMemory')
+def testMemory():
+    item = session.query(Memory).first()
+    if not item:
+        print('Empty memory: id=1, type=game, sold=0 |Create|')
+        session.add(Memory(1, 'game', 0))
+        session.commit()
+        memoTester()
+        item = session.query(Memory).first()
+        session.delete(item)
+        session.commit()
+        print('Test memory 4/4 |Callback|')
+    else:
+        memoTester()
+        print('Test memory 4/4 |Callback|')
+    return redirect('/')
 
 
 def connect_test():

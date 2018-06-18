@@ -122,18 +122,19 @@ def getData():
 
     deviceTable = []
 
-    print('Uruchomienie sklepikarza')
-    faker = []
-    fakerCount = 5
-    for x in range(0, fakerCount):
-        faker.append(Faker_Shop(x))
-    fake = 0
-
+    # print('Uruchomienie sklepikarza')
+    # faker = []
+    # fakerCount = 1
+    # for x in range(0, fakerCount):
+    #     faker.append(Faker_Shop(x))
+    # fake = 0
+    #
     print('Uruchomienie agenta')
     agents = []
-    agentsCount = 25
+    agentsCount = 1
     for x in range(0, agentsCount):
-        agents.append(AgentC(dane, faker[random.randint(0, fakerCount - 1)], used, x))
+        agents.append(AgentC(dane, used, x))
+        # agents.append(AgentC(dane, faker[random.randint(0, fakerCount - 1)], used, x))
 
     # Eliminacja powtórzeń
     # Wybranie lepszej ceny

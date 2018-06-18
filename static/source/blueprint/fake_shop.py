@@ -5,6 +5,11 @@ import multiprocessing
 
 from static.source.model import session
 from static.source.model.Items import Items
+from static.source.model.Memory import Memory
+
+
+def licz(x):
+    print('++ {} ++'.format(x))
 
 
 class Faker_Shop:
@@ -18,16 +23,32 @@ class Faker_Shop:
     def search(self, message, box):
         self.device_type = message
         back_message = 'Look'
+        fromMemory = session.query(Memory).filter(Memory.type == str(self.device_type)).all()
+        memoList = []
+        memoTrue = False
+        if fromMemory:
+            if len(fromMemory)>10:
+                memoTrue = True
+                for x in fromMemory:
+                    memoList.append(x.deviceID)
+
+        itemsCount = session.query(Items).count() - 1
+
         for x in range(10):
-            # print('No ja to szukam laptopa typu: {}'.format(self.device_type))
-            itemsCount = session.query(Items).count() - 1
-            randID = random.randint(0, itemsCount)
+            if memoTrue and x > 8:
+                # Traf z pamięci
+                randID = random.choice(memoList)
+            else:
+                # Ślepy traf
+                randID = random.randint(0, itemsCount)
             item = session.query(Items).filter(Items.id == randID).first()
+
+            # Jeśli obiekt nie istnieje
             while not item:
                 print('Item: {}'.format(item))
                 randID = random.randint(0, itemsCount)
                 item = session.query(Items).filter(Items.id == randID).first()
-            # print('Shop ID: {}:{}'.format(self.shopID, item.name))
+
             # Generowanie odpowiedzi
             back_message += '&' + \
                            str(item.id) + '|' + \
@@ -63,6 +84,22 @@ class Faker_Shop:
             return 'negotiation|' + str(self.newPrice) + '|' + box
         if message == 'ok':
             item = session.query(Items).filter(Items.id == box).first()
+            memo = session.query(Memory).filter(Memory.deviceID == box).all()
+            if len(memo) == 0:
+                print('=== {} ==='.format('Ot coś nowego'))
+                session.add(Memory(box, self.device_type, 1))
+                session.commit()
+            for x in memo:
+                if x.type != self.device_type and x.deviceID != int(box):
+                    print('=== {} ==='.format('Inny typ inne użądzenie'))
+                    session.add(Memory(box, self.device_type, 1))
+                    session.commit()
+                elif x.type == self.device_type and x.deviceID == int(box):
+                    print('=== {} ==='.format('+1 do sprzedarzy'))
+                    x.sold = int(x.sold) + 1
+                    session.add(x)
+                    session.commit()
+
             back_message = '1|' + \
                            str(item.id) + '|' + \
                            str(item.name) + '|' + \

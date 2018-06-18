@@ -7,10 +7,10 @@ from static.source.blueprint.rmChar import rmChar
 
 
 class AgentC():
-    def __init__(self, data, faker, device, id):
-        threading.Thread.__init__(self)
+    # def __init__(self, data, faker, device, id):
+    def __init__(self, data, device, id):
         self.dane = data
-        self.faker = faker
+        # self.faker = faker
         self.device = device
         self.oldPrice = 0
         self.loopNum = 0
@@ -183,14 +183,14 @@ class AgentC():
         # Stworzony zostanie obiekt socket z typem translacji AF_INET
         # przeznaczony dla adresów IPv4
         # SOCK_STREAM - typ używny dla protokolow TCP
-        ## client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
         # host i port (aktualnie lokalny)
-        ## target_host = "0.0.0.0"
-        ## target_port = 9999
+        target_host = "0.0.0.0"
+        target_port = 9999
 
         # Nawiązanie połączneia
-        ## client.connect((target_host, target_port))
+        client.connect((target_host, target_port))
 
         # wysłanie wiadomości
         ## client.send(message.encode("unicode-escape"))
@@ -204,9 +204,13 @@ class AgentC():
             message = self.makeMessage(mm)
 
             # Wysłanie wiadomości do sztucznego sklepiku
-            self.faker.message = message.encode("unicode-escape")
-            self.faker.device_type = self.device
-            respo = self.faker.run()
+            # self.faker.message = message.encode("unicode-escape")
+            # self.faker.device_type = self.device
+            # respo = self.faker.run()
+
+            client.send(message.encode("unicode-escape"))
+
+            respo = client.recv(4096)
 
             # Odebranie odpowiedzi
             respo = respo.decode("unicode-escape")
