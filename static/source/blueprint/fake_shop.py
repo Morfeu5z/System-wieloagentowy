@@ -8,22 +8,21 @@ from static.source.model.Items import Items
 from static.source.model.Memory import Memory
 
 
-def licz(x):
-    print('++ {} ++'.format(x))
-
-
 class Faker_Shop:
     def __init__(self, id):
-        threading.Thread.__init__(self)
         self.message = []
         self.device_type = ''
         self.newPrice = 0
         self.shopID = id
+        self.sold = 0
 
     def search(self, message, box):
         self.device_type = message
         back_message = 'Look'
-        fromMemory = session.query(Memory).filter(Memory.type == str(self.device_type)).all()
+        jackie = session.query(Memory).filter(Memory.type == str(self.device_type)).order_by(Memory.sold.asc()).first()
+        jackie = int(jackie.sold) + 3
+        print('=== Jackie: {}'.format(jackie))
+        fromMemory = session.query(Memory).filter(Memory.type == str(self.device_type)).filter(Memory.sold < jackie).all()
         memoList = []
         memoTrue = False
         if fromMemory:
@@ -35,13 +34,14 @@ class Faker_Shop:
         itemsCount = session.query(Items).count() - 1
 
         for x in range(10):
-            if memoTrue and x > 8:
+            if memoTrue and x >= 7:
                 # Traf z pamięci
                 randID = random.choice(memoList)
             else:
                 # Ślepy traf
                 randID = random.randint(0, itemsCount)
             item = session.query(Items).filter(Items.id == randID).first()
+
 
             # Jeśli obiekt nie istnieje
             while not item:
@@ -85,17 +85,19 @@ class Faker_Shop:
         if message == 'ok':
             item = session.query(Items).filter(Items.id == box).first()
             memo = session.query(Memory).filter(Memory.deviceID == box).all()
+            # print('=== {} ==='.format(len(memo)))
             if len(memo) == 0:
                 print('=== {} ==='.format('Ot coś nowego'))
                 session.add(Memory(box, self.device_type, 1))
                 session.commit()
+            alert = len(memo)
             for x in memo:
-                if x.type != self.device_type and x.deviceID != int(box):
+                if x.type != self.device_type and alert<3:
                     print('=== {} ==='.format('Inny typ inne użądzenie'))
-                    session.add(Memory(box, self.device_type, 1))
+                    session.add(Memory(box, self.device_type, 0))
                     session.commit()
-                elif x.type == self.device_type and x.deviceID == int(box):
-                    print('=== {} ==='.format('+1 do sprzedarzy'))
+                elif x.type == self.device_type and alert<3:
+                    print('=== {} === {}'.format('+1 do sprzedarzy', box))
                     x.sold = int(x.sold) + 1
                     session.add(x)
                     session.commit()

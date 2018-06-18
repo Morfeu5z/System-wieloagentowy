@@ -122,19 +122,18 @@ def getData():
 
     deviceTable = []
 
-    # print('Uruchomienie sklepikarza')
-    # faker = []
-    # fakerCount = 1
-    # for x in range(0, fakerCount):
-    #     faker.append(Faker_Shop(x))
-    # fake = 0
-    #
+    print('Uruchomienie sklepikarza')
+    faker = []
+    fakerCount = 1
+    for x in range(0, fakerCount):
+        faker.append(Faker_Shop(x))
+    fake = 0
+
     print('Uruchomienie agenta')
     agents = []
-    agentsCount = 1
+    agentsCount = 25
     for x in range(0, agentsCount):
-        agents.append(AgentC(dane, used, x))
-        # agents.append(AgentC(dane, faker[random.randint(0, fakerCount - 1)], used, x))
+        agents.append(AgentC(dane, faker[random.randint(0, fakerCount - 1)], used, x))
 
     # Eliminacja powtórzeń
     # Wybranie lepszej ceny
@@ -143,29 +142,33 @@ def getData():
 
     tmp = ''
     xyz = []
-
     # Wielowątkowe wypuszczenie agentów
     # Uzupełniają listę parametrami
     # lub empty jeśli nic agent nie znajdzie
+    manager = multiprocessing.Manager()
+    return_dict = manager.dict()
+    p = Pool(processes=4)
     for x in range(0, agentsCount):
-        manager = multiprocessing.Manager()
-        return_dict = manager.dict()
-        agent = multiprocessing.Process(target=agents[x].run(return_dict))
+        run = p.map_async(agents[x].run(return_dict, x), range(4))
         xyz.append(return_dict.values())
-        agent.start()
-        agent.join()
+    p.close()
 
     # Eliminacja powtórzeń
     for elem in xyz:
         tmp = elem[0].split('|')
+        print('=== {} ==='.format(tmp))
         if tmp[0] != 'empty':
             num = -1
             for y in deviceTable:
                 num += 1
                 if y[1] == tmp[1]:
+                    print('? {} == {} ?'.format(y[1], tmp[1]))
                     if y[9] > tmp[9]:
+                        # print('? {} > {} ?'.format(y[9], tmp[9]))
                         deviceTable[num] = tmp
                     canBe = 0
+                else:
+                    canBe = 1
             if canBe == 1:
                 deviceTable.append(tmp)
     print(time.time() - time0)

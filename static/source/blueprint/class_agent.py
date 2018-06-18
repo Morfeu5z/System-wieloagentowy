@@ -1,3 +1,4 @@
+import multiprocessing
 import random
 import socket
 import threading
@@ -7,10 +8,9 @@ from static.source.blueprint.rmChar import rmChar
 
 
 class AgentC():
-    # def __init__(self, data, faker, device, id):
-    def __init__(self, data, device, id):
+    def __init__(self, data, faker, device, id):
         self.dane = data
-        # self.faker = faker
+        self.faker = faker
         self.device = device
         self.oldPrice = 0
         self.loopNum = 0
@@ -173,7 +173,7 @@ class AgentC():
                 message = 'negotiation|end|' + str(rid)
             return message
 
-    def run(self, return_dict):
+    def run(self, return_dict, x):
         '''
                     * Nawiązuje połączenie wysyłając zapytanie i czekając na odpowiedź
                     :return: dorzuci produkt do listy produktów
@@ -183,14 +183,14 @@ class AgentC():
         # Stworzony zostanie obiekt socket z typem translacji AF_INET
         # przeznaczony dla adresów IPv4
         # SOCK_STREAM - typ używny dla protokolow TCP
-        client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        ## client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
         # host i port (aktualnie lokalny)
-        target_host = "0.0.0.0"
-        target_port = 9999
+        ## target_host = "0.0.0.0"
+        ## target_port = 9999
 
         # Nawiązanie połączneia
-        client.connect((target_host, target_port))
+        ## client.connect((target_host, target_port))
 
         # wysłanie wiadomości
         ## client.send(message.encode("unicode-escape"))
@@ -204,13 +204,9 @@ class AgentC():
             message = self.makeMessage(mm)
 
             # Wysłanie wiadomości do sztucznego sklepiku
-            # self.faker.message = message.encode("unicode-escape")
-            # self.faker.device_type = self.device
-            # respo = self.faker.run()
-
-            client.send(message.encode("unicode-escape"))
-
-            respo = client.recv(4096)
+            self.faker.message = message.encode("unicode-escape")
+            self.faker.device_type = self.device
+            respo = self.faker.run()
 
             # Odebranie odpowiedzi
             respo = respo.decode("unicode-escape")
@@ -219,10 +215,11 @@ class AgentC():
             if respo[0] == '2':
                 print('Nie znaleziono :(')
                 return_dict[0] = 'empty'
-                return 0
+                respo = 'empty'
+                tran = 1
             mm = respo
 
         respo2 = respo.split('|')
         print("Agen ID: {}, take: {}".format(self.agentID, respo2))
         return_dict[0] = respo
-        return 0
+
