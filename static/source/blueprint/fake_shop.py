@@ -9,20 +9,22 @@ from static.source.model.Memory import Memory
 
 
 class Faker_Shop:
-    def __init__(self, id):
-        self.message = []
-        self.device_type = ''
+    def __init__(self, message, type, id):
+        self.message = message # table
+        self.device_type = type # np game
         self.newPrice = 0
         self.shopID = id
         self.sold = 0
 
     def search(self, message, box):
-        self.device_type = message
+        # self.device_type = message
         back_message = 'Look'
+        fromMemory = None
         jackie = session.query(Memory).filter(Memory.type == str(self.device_type)).order_by(Memory.sold.asc()).first()
-        jackie = int(jackie.sold) + 3
-        print('=== Jackie: {}'.format(jackie))
-        fromMemory = session.query(Memory).filter(Memory.type == str(self.device_type)).filter(Memory.sold < jackie).all()
+        if jackie:
+            jackie = int(jackie.sold) + 3
+            print('=== Jackie: {}'.format(jackie))
+            fromMemory = session.query(Memory).filter(Memory.type == str(self.device_type)).filter(Memory.sold < jackie).all()
         memoList = []
         memoTrue = False
         if fromMemory:
@@ -73,16 +75,21 @@ class Faker_Shop:
         return newSearch
 
     def negotiation(self, message, box):
-        if message == 'end':
+        # print('== Message: {} =='.format(message))
+        messageZero = message
+        message = message.split('$')
+        # print('== MessageZero: {} =='.format(messageZero))
+        # print('== Message: {} =='.format(message))
+        if messageZero == 'end':
             return '2'
-        if message == 'toomuch':
+        elif message[0] == 'toomuch':
             humor = random.randint(1, 5)
             print('Shop ID: {}, Obniżka: {}%'.format(self.shopID, humor))
             item = session.query(Items).filter(Items.id == box).first()
             self.newPrice = item.price - ((item.price * humor) / 100)
             print('Shop ID: {}, Old price: {} | New price: {}'.format(self.shopID, item.price, self.newPrice))
-            return 'negotiation|' + str(self.newPrice) + '|' + box
-        if message == 'ok':
+            return 'negotiation|' + str(self.newPrice) + '$' + message[1] + '|' + box
+        elif message[0] == 'ok':
             item = session.query(Items).filter(Items.id == box).first()
             memo = session.query(Memory).filter(Memory.deviceID == box).all()
             # print('=== {} ==='.format(len(memo)))
@@ -111,7 +118,7 @@ class Faker_Shop:
                            str(item.gpu) + '|' + \
                            str(item.battery) + '|' + \
                            str(item.dec) + '|' + \
-                           str(self.newPrice) + '|' + \
+                           str(message[1]) + '|' + \
                            str(item.procesor) + '|' + \
                            str(item.grafika)
             return back_message
@@ -125,9 +132,8 @@ class Faker_Shop:
         :return: propozycja produktu
         '''
 
-        message = str(self.message.decode("unicode-escape"))
         # print('Message decode: {}'.format(message))
-        message = message.split('|')
+        message = self.message
 
         # opcje dla typu rozmowy
         switchOption = {
@@ -140,4 +146,5 @@ class Faker_Shop:
         back = switchOption[message[0]](message[1], message[2])
         # print('Back message: {}'.format(back))
 
-        return back.encode("unicode-escape")
+        # return back.encode("unicode-escape")
+        return back

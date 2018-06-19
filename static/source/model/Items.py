@@ -30,18 +30,3 @@ class Items(_Base):
         self.price = price
         self.procesor = procesor
         self.grafika = grafika
-#
-# class Sold(_Base):
-#     '''
-#     * Model dla tabeli items
-#     '''
-#     __sold__ = 'sold'
-#     id = Column(Integer, primary_key=True)
-#     type = Column(String(50))
-#     device = Column(Integer)
-#     sold = Column(Integer)
-#
-#     def __init__(self, type, device, sold):
-#         self.type = type
-#         self.device = device
-#         self.sold = sold

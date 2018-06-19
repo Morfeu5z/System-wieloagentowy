@@ -1,13 +1,10 @@
 import multiprocessing
 import random
-import threading
 import time
 from multiprocessing import Pool
-from shop import realy_shop, printme
 
 from flask import Blueprint, request, jsonify
 
-from static.source.blueprint.fake_shop import Faker_Shop
 from static.source.blueprint.rmChar import rmChar
 from static.source.blueprint.class_agent import AgentC
 
@@ -122,18 +119,20 @@ def getData():
 
     deviceTable = []
 
-    print('Uruchomienie sklepikarza')
-    faker = []
-    fakerCount = 1
-    for x in range(0, fakerCount):
-        faker.append(Faker_Shop(x))
-    fake = 0
+    # print('Uruchomienie sklepikarza')
+    # faker = []
+    # fakerCount = 1
+    # for x in range(0, fakerCount):
+    #     faker.append(Faker_Shop(x))
+    # fake = 0
 
     print('Uruchomienie agenta')
     agents = []
-    agentsCount = 25
+    ports = ['4001', '4002', '4003']
+    agentsCount = 20
     for x in range(0, agentsCount):
-        agents.append(AgentC(dane, faker[random.randint(0, fakerCount - 1)], used, x))
+        # agents.append(AgentC(dane, faker[random.randint(0, fakerCount - 1)], used, x))
+        agents.append(AgentC(dane, used, x, random.choice(ports)))
 
     # Eliminacja powtórzeń
     # Wybranie lepszej ceny
@@ -151,24 +150,33 @@ def getData():
     for x in range(0, agentsCount):
         run = p.map_async(agents[x].run(return_dict, x), range(4))
         xyz.append(return_dict.values())
+        print()
+        print('===========')
+        print('===Agent===')
+        print('===========')
+        print()
     p.close()
 
     # Eliminacja powtórzeń
     for elem in xyz:
         tmp = elem[0].split('|')
-        print('=== {} ==='.format(tmp))
+        # print('=== {} ==='.format(tmp))
         if tmp[0] != 'empty':
             num = -1
             for y in deviceTable:
+                print('== {} =='.format(y))
                 num += 1
-                if y[1] == tmp[1]:
-                    print('? {} == {} ?'.format(y[1], tmp[1]))
-                    if y[9] > tmp[9]:
-                        # print('? {} > {} ?'.format(y[9], tmp[9]))
-                        deviceTable[num] = tmp
-                    canBe = 0
+                if len(y)>1:
+                    if y[1] == tmp[1]:
+                        print('? {} == {} ?'.format(y[1], tmp[1]))
+                        if y[9] > tmp[9]:
+                            # print('? {} > {} ?'.format(y[9], tmp[9]))
+                            deviceTable[num] = tmp
+                        canBe = 0
+                    else:
+                        canBe = 1
                 else:
-                    canBe = 1
+                    canBe = 0
             if canBe == 1:
                 deviceTable.append(tmp)
     print(time.time() - time0)

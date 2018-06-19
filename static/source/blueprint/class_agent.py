@@ -1,16 +1,14 @@
-import multiprocessing
 import random
-import socket
-import threading
 
-from static.source.blueprint.fake_shop import Faker_Shop
+import requests
 from static.source.blueprint.rmChar import rmChar
 
 
 class AgentC():
-    def __init__(self, data, faker, device, id):
+    def __init__(self, data, device, id, port):
         self.dane = data
-        self.faker = faker
+        # self.faker = faker
+        self.port = port
         self.device = device
         self.oldPrice = 0
         self.loopNum = 0
@@ -45,15 +43,24 @@ class AgentC():
 
     def buildMessage(self, respo):
         r = respo.split('|')
+        # print('=== {} ==='.format(r))
         if r[0] == 'negotiation':
+            price = r[1].split('$')
+            print('== price: {} =='.format(price))
             humor = random.randint(1, 10)
             print('Agen ID: {}, Chce: -{}%'.format(self.agentID, humor))
-            chcetyle = self.oldPrice - ((self.oldPrice * humor) / 100)
-            print('Agen ID: {}, Nowa cena: {} vs {}'.format(self.agentID, r[1], chcetyle))
-            if float(r[1]) <= chcetyle:
-                return 'negotiation|ok|' + str(r[2])
+            chcetyle = float(price[1]) - ((float(price[1]) * humor) / 100)
+            print('Agen ID: {}, Nowa cena: {} vs {}'.format(self.agentID, price[0], chcetyle))
+            if float(price[0]) <= chcetyle:
+                okBack = 'negotiation|ok$'+price[0]+'|' + str(r[2])
+                # OK
+                print("=== Thx: {} ===".format(okBack))
+                return okBack
             else:
-                return 'negotiation|toomuch|' + str(r[2])
+                tooMuch = 'negotiation|toomuch$'+price[1]+'|' + str(r[2])
+                # OK
+                # print("=== Thx: {} ===".format(tooMuch))
+                return tooMuch
         else:
             tab = respo.split('&')
             tabR = []
@@ -164,7 +171,7 @@ class AgentC():
                         ok += 1
                 if ok == 6:
                     self.oldPrice = float(r[5])
-                    message = 'negotiation|toomuch|' + str(rid)
+                    message = 'negotiation|toomuch$'+str(r[5])+'|' + str(rid)
                     return message
 
             if ok < 6:
@@ -204,12 +211,17 @@ class AgentC():
             message = self.makeMessage(mm)
 
             # Wysłanie wiadomości do sztucznego sklepiku
-            self.faker.message = message.encode("unicode-escape")
-            self.faker.device_type = self.device
-            respo = self.faker.run()
+            # self.faker.message = message.encode("unicode-escape")
+            # self.faker.device_type = self.device
+            # respo = self.faker.run()
 
+            toSend = {'message': message}
+            respo = requests.post('http://127.0.0.1:'+self.port+'/conversation', json=toSend)
             # Odebranie odpowiedzi
-            respo = respo.decode("unicode-escape")
+            respo = respo.json()
+            respo = respo['message']
+            # print('=== callback: {} ==='.format(respo))
+
             if respo[0] == '1':
                 tran = 1
             if respo[0] == '2':
@@ -222,4 +234,4 @@ class AgentC():
         respo2 = respo.split('|')
         print("Agen ID: {}, take: {}".format(self.agentID, respo2))
         return_dict[0] = respo
-
+        # Zwraca do getData
