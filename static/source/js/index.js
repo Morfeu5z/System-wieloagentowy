@@ -14,6 +14,7 @@ ansList = [
  * @param butt
  */
 function buttClick(butt) {
+    refresh();
     var name = butt.name;
     var elem = document.getElementsByName(name);
     elem[0].className = "btn btn-outline-info";

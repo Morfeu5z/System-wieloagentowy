@@ -5,10 +5,10 @@ from static.source.blueprint.rmChar import rmChar
 
 
 class AgentC():
-    def __init__(self, data, device, id, port):
+    def __init__(self, data, device, id):
         self.dane = data
         # self.faker = faker
-        self.port = port
+        # self.port = port
         self.device = device
         self.oldPrice = 0
         self.loopNum = 0
@@ -52,7 +52,7 @@ class AgentC():
             chcetyle = float(price[1]) - ((float(price[1]) * humor) / 100)
             print('Agen ID: {}, Nowa cena: {} vs {}'.format(self.agentID, price[0], chcetyle))
             if float(price[0]) <= chcetyle:
-                okBack = 'negotiation|ok$'+price[0]+'|' + str(r[2])
+                okBack = 'negotiation|ok$'+price[0]+'$'+self.device+'|' + str(r[2])
                 # OK
                 print("=== Thx: {} ===".format(okBack))
                 return okBack
@@ -180,7 +180,9 @@ class AgentC():
                 message = 'negotiation|end|' + str(rid)
             return message
 
-    def run(self, return_dict, x):
+    # def run(self, return_dict, x):
+    def run(self, q):
+        print('=== Run ===')
         '''
                     * Nawiązuje połączenie wysyłając zapytanie i czekając na odpowiedź
                     :return: dorzuci produkt do listy produktów
@@ -206,6 +208,9 @@ class AgentC():
 
         mm = 'none'
         tran = 0
+        ports = ['4001', '4002', '4003']
+        # port = '4001'
+        port = random.choice(ports)
 
         while tran != 1:
             message = self.makeMessage(mm)
@@ -216,22 +221,41 @@ class AgentC():
             # respo = self.faker.run()
 
             toSend = {'message': message}
-            respo = requests.post('http://127.0.0.1:'+self.port+'/conversation', json=toSend)
+            connect = True
+            while connect:
+                try:
+                    respo = requests.post('http://127.0.0.1:'+port+'/conversation', json=toSend)
+                    connect = False
+                except:
+                    connect = True
             # Odebranie odpowiedzi
-            respo = respo.json()
-            respo = respo['message']
+            try:
+                respo = respo.json()
+                respo = respo['message']
+            except:
+                print('===========')
+                print('{}'.format(respo))
+                print('===========')
+                port = random.choice(ports)
+                respo = 'none'
             # print('=== callback: {} ==='.format(respo))
-
-            if respo[0] == '1':
-                tran = 1
-            if respo[0] == '2':
-                print('Nie znaleziono :(')
-                return_dict[0] = 'empty'
-                respo = 'empty'
-                tran = 1
+            if respo != 'none':
+                if respo[0] == '1':
+                    tran = 1
+                if respo[0] == '2':
+                    print('Nie znaleziono :(')
+                    # return_dict[0] = 'empty'
+                    callback = 'empty'
+                    respo = 'empty'
+                    tran = 1
             mm = respo
 
         respo2 = respo.split('|')
         print("Agen ID: {}, take: {}".format(self.agentID, respo2))
-        return_dict[0] = respo
+        # return_dict[0] = respo
+        callback = respo
         # Zwraca do getData
+        # return callback
+        q.put([callback])
+        # print('=== Queue: {} ==='.format(callback))
+

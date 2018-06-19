@@ -1,7 +1,7 @@
 # search|office/universal/game, talk|yes/no, negotiate|toomuch/ok/nope, show|product_id
 import random
-import threading
-import multiprocessing
+import time
+
 
 from static.source.model import session
 from static.source.model.Items import Items
@@ -9,22 +9,42 @@ from static.source.model.Memory import Memory
 
 
 class Faker_Shop:
-    def __init__(self, message, type, id):
+    def __init__(self, message, orginalType, id):
         self.message = message # table
-        self.device_type = type # np game
+        self.device_type = orginalType # np game
         self.newPrice = 0
         self.shopID = id
         self.sold = 0
 
     def search(self, message, box):
-        # self.device_type = message
+        self.device_type = message
         back_message = 'Look'
         fromMemory = None
-        jackie = session.query(Memory).filter(Memory.type == str(self.device_type)).order_by(Memory.sold.asc()).first()
+        jackie = None
+        dead = 0
+        while dead < 3:
+            try:
+                jackie = session.query(Memory).filter(Memory.type == str(self.device_type)).order_by(Memory.sold.asc()).first()
+                dead = 3
+            except:
+                dead += 1
+                time.sleep(.100)
+                if dead > 2:
+                    return '2'
         if jackie:
             jackie = int(jackie.sold) + 3
             print('=== Jackie: {}'.format(jackie))
-            fromMemory = session.query(Memory).filter(Memory.type == str(self.device_type)).filter(Memory.sold < jackie).all()
+            dead = 0
+            while dead < 3:
+                try:
+                    fromMemory = session.query(Memory).filter(Memory.type == str(self.device_type)).filter(Memory.sold < jackie).all()
+                    dead = 3
+                except:
+                    dead += 1
+                    time.sleep(.100)
+                    if dead > 2:
+                        return '2'
+
         memoList = []
         memoTrue = False
         if fromMemory:
@@ -76,38 +96,63 @@ class Faker_Shop:
 
     def negotiation(self, message, box):
         # print('== Message: {} =='.format(message))
-        messageZero = message
-        message = message.split('$')
         # print('== MessageZero: {} =='.format(messageZero))
         # print('== Message: {} =='.format(message))
-        if messageZero == 'end':
+        if message == 'end':
             return '2'
-        elif message[0] == 'toomuch':
+        else:
+            message = message.split('$')
+
+        if message[0] == 'toomuch':
             humor = random.randint(1, 5)
             print('Shop ID: {}, Obniżka: {}%'.format(self.shopID, humor))
-            item = session.query(Items).filter(Items.id == box).first()
+            dead = 0
+            while dead < 3:
+                try:
+                    item = session.query(Items).filter(Items.id == box).first()
+                    dead = 3
+                except:
+                    dead += 1
+                    time.sleep(.100)
+                    if dead > 2:
+                        return '2'
+
             self.newPrice = item.price - ((item.price * humor) / 100)
             print('Shop ID: {}, Old price: {} | New price: {}'.format(self.shopID, item.price, self.newPrice))
             return 'negotiation|' + str(self.newPrice) + '$' + message[1] + '|' + box
         elif message[0] == 'ok':
+            dead = 0
+            while dead < 3:
+                try:
+                    item = session.query(Items).filter(Items.id == box).first()
+                    dead = 3
+                except:
+                    dead += 1
+                    time.sleep(.100)
+                    if dead > 2:
+                        return '2'
+
             item = session.query(Items).filter(Items.id == box).first()
             memo = session.query(Memory).filter(Memory.deviceID == box).all()
             # print('=== {} ==='.format(len(memo)))
+            alert = len(memo)
             if len(memo) == 0:
                 print('=== {} ==='.format('Ot coś nowego'))
-                session.add(Memory(box, self.device_type, 1))
+                self.device_type = message[2]
+                # print('=== sdt: {}'.format(message[2]))
+                session.add(Memory(box, message[2], 1))
                 session.commit()
-            alert = len(memo)
-            for x in memo:
-                if x.type != self.device_type and alert<3:
-                    print('=== {} ==='.format('Inny typ inne użądzenie'))
-                    session.add(Memory(box, self.device_type, 0))
-                    session.commit()
-                elif x.type == self.device_type and alert<3:
-                    print('=== {} === {}'.format('+1 do sprzedarzy', box))
-                    x.sold = int(x.sold) + 1
-                    session.add(x)
-                    session.commit()
+            else:
+                for x in memo:
+                    if x.type != message[2] and alert<3:
+                        print('=== {} ==='.format('Inny typ inne użądzenie'))
+                        session.add(Memory(box, message[2], 0))
+                        session.commit()
+                    elif x.type == message[2] and alert<3:
+                        print('=== {} === {}'.format('+1 do sprzedarzy', box))
+                        x.sold = int(x.sold) + 1
+                        session.add(x)
+                        session.commit()
 
             back_message = '1|' + \
                            str(item.id) + '|' + \
@@ -122,6 +167,7 @@ class Faker_Shop:
                            str(item.procesor) + '|' + \
                            str(item.grafika)
             return back_message
+        return 'none'
 
 
     def run(self):

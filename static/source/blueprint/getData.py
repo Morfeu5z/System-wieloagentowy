@@ -1,12 +1,13 @@
 import multiprocessing
 import random
 import time
-from multiprocessing import Pool
-
+import threading
+from multiprocessing import Queue, Manager, Lock
 from flask import Blueprint, request, jsonify
 
 from static.source.blueprint.rmChar import rmChar
 from static.source.blueprint.class_agent import AgentC
+from static.source.model import session
 
 data = Blueprint('gatData', __name__, template_folder='templates')
 
@@ -129,34 +130,59 @@ def getData():
     print('Uruchomienie agenta')
     agents = []
     ports = ['4001', '4002', '4003']
-    agentsCount = 1
-    for x in range(0, agentsCount):
+    # ports = ['4001']
+    agentsCount = 150
+    # for x in range(0, agentsCount):
         # agents.append(AgentC(dane, faker[random.randint(0, fakerCount - 1)], used, x))
-        agents.append(AgentC(dane, used, x, random.choice(ports)))
+        # agents.append(AgentC(dane, used, x))
+    # age = AgentC(dane, used, 1)
 
     # Eliminacja powtórzeń
     # Wybranie lepszej ceny
     canBe = 1
     time0 = time.time()
-
-    tmp = ''
     xyz = []
+
+    # tmp = ''
     # Wielowątkowe wypuszczenie agentów
     # Uzupełniają listę parametrami
     # lub empty jeśli nic agent nie znajdzie
-    manager = multiprocessing.Manager()
-    return_dict = manager.dict()
-    p = Pool(processes=3)
+    # manager = multiprocessing.Manager()
+    # return_dict = manager.dict()
+    # p = Pool(processes=3)
+    # for x in range(0, agentsCount):
+    #     # run = p.map_async(agents[x].run, [return_dict, x])
+    #     run = p.map_async(agents[x].run(return_dict, x),[x])
+    #     xyz.append(return_dict.values())
+    #     print()
+    #     print('===========')
+    #     print('===Agent===')
+    #     print('===========')
+    #     print()
+    # p.close()
+
+    watek = []
+    m = Queue()
+    l = Lock()
     for x in range(0, agentsCount):
+        watek.append(threading.Thread(target=AgentC(dane, used, x).run, args=(m, )))
+    for x in range(0, agentsCount):
+        watek[x].start()
         # run = p.map_async(agents[x].run, [return_dict, x])
-        run = p.map_async(agents[x].run(return_dict, x), range(10))
-        xyz.append(return_dict.values())
-        print()
-        print('===========')
-        print('===Agent===')
-        print('===========')
-        print()
-    p.close()
+        # print()
+        # print('===Agent===')
+        # print()
+    # print('=== Manager: {} ==='.format(m.get()))
+    # xyz.append(m.get())
+    for x in range(0, agentsCount):
+        xyz.append(m.get())
+        watek[x].join()
+
+    # print('=== Queue: {} ==='.format(q.get()))
+    # print('=== Manager: {} ==='.format(xyz))
+    # print()
+    # print('=== {} ==='.format(xyz))
+    # print()
 
     # Eliminacja powtórzeń
     for elem in xyz:
@@ -165,11 +191,11 @@ def getData():
         if tmp[0] != 'empty':
             num = -1
             for y in deviceTable:
-                print('== {} =='.format(y))
+                # print('== {} =='.format(y))
                 num += 1
                 if len(y)>1:
                     if y[1] == tmp[1]:
-                        print('? {} == {} ?'.format(y[1], tmp[1]))
+                        # print('? {} == {} ?'.format(y[1], tmp[1]))
                         if y[9] > tmp[9]:
                             # print('? {} > {} ?'.format(y[9], tmp[9]))
                             deviceTable[num] = tmp
@@ -180,5 +206,9 @@ def getData():
                     canBe = 0
             if canBe == 1:
                 deviceTable.append(tmp)
+    # print()
+    # print('=========')
     print(time.time() - time0)
+    # print('=========')
+    # print()
     return jsonify({'response': deviceTable})
