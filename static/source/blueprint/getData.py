@@ -129,7 +129,7 @@ def getData():
     print('Uruchomienie agenta')
     agents = []
     ports = ['4001', '4002', '4003']
-    agentsCount = 20
+    agentsCount = 1
     for x in range(0, agentsCount):
         # agents.append(AgentC(dane, faker[random.randint(0, fakerCount - 1)], used, x))
         agents.append(AgentC(dane, used, x, random.choice(ports)))
@@ -146,9 +146,10 @@ def getData():
     # lub empty jeśli nic agent nie znajdzie
     manager = multiprocessing.Manager()
     return_dict = manager.dict()
-    p = Pool(processes=4)
+    p = Pool(processes=3)
     for x in range(0, agentsCount):
-        run = p.map_async(agents[x].run(return_dict, x), range(4))
+        # run = p.map_async(agents[x].run, [return_dict, x])
+        run = p.map_async(agents[x].run(return_dict, x), range(10))
         xyz.append(return_dict.values())
         print()
         print('===========')
